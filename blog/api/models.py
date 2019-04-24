@@ -19,4 +19,4 @@ class User(AbstractUser):
 
 class Post(BaseModel):
     user = models.ForeignKey(User, on_delete=models.CASCADE)
-    content_url = models.URLField()
+    content_url = models.URLField(null=False)

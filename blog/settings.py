@@ -121,3 +121,5 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/2.1/howto/static-files/
 
 STATIC_URL = '/static/'
+
+POST_CONTENT_PATH = f'{os.environ.get("POST_CONTENT_URL")}posts'
