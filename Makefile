@@ -1,3 +1,8 @@
+clean:
+	find . -name '*.pyc' -exec rm -f {} +
+	find . -name '*.pyo' -exec rm -f {} +
+	find . -name '*~' -exec rm -f {} +
+
 format:
 	black .
 
@@ -9,3 +14,5 @@ test:
 
 typecheck:
 	mypy --ignore-missing-imports .
+
+prep: clean typecheck format test
