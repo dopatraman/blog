@@ -15,7 +15,6 @@ def get_post(request, post_id):
 
 def create_post(request):
     post_content = request.body
-
     post_content_url = save_post(post_content)
 
     post = Post.objects.create(user=request.user, content_url=post_content_url)
