@@ -3,7 +3,7 @@ PostTest
 """
 from django.test import TestCase, RequestFactory
 from blog.tests.factories.user import UserFactory
-from blog.api.views import create_post
+from blog.api.views import create_post, get_all_posts
 from blog.api.models import Post
 
 
@@ -22,3 +22,11 @@ class PostTest(TestCase):
         create_post(request)
         posts = Post.objects.all()
         self.assertEqual(posts.count(), 1)
+
+    def test_get_all_posts(self):
+        request = self.factory.post("/api/create")
+        request.user = self.user
+        create_post(request)
+        request = self.factory.get("/api/")
+        response = get_all_posts(request)
+        self.assertEqual(response.content, "")
