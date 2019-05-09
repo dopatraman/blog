@@ -8,7 +8,7 @@ env:
 	pipenv shell
 
 shell:
-	python -i scripts/shell.py
+	python
 
 install:
 	pipenv install

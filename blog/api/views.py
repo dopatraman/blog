@@ -12,7 +12,7 @@ def get_all_posts(request):
 
 
 def get_post(request, post_id):
-    return JsonResponse({"post": Post.objects.filter(pk=post_id).first()})
+    return JsonResponse({"post": Post.objects.filter(pk=post_id).first().json()})
 
 
 def create_post(request):

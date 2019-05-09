@@ -5,7 +5,7 @@ import json
 
 from django.test import TestCase, RequestFactory
 from blog.tests.factories.user import UserFactory
-from blog.api.views import create_post, get_all_posts
+from blog.api.views import create_post, get_all_posts, get_post
 from blog.api.models import Post
 
 
@@ -34,3 +34,21 @@ class PostTest(TestCase):
         posts = json.loads(response.content)
         self.assertEquals(1, len(posts))
         self.assertEquals(posts.get("posts")[0].get("user").get("id"), self.user.id)
+
+    def test_get_all_posts_none(self):
+        request = self.factory.get("/api/")
+        response = get_all_posts(request)
+        posts = json.loads(response.content)
+        self.assertEquals([], posts.get("posts"))
+
+    def test_get_single_post(self):
+        request = self.factory.post("/api/create")
+        request.user = self.user
+        response = create_post(request)
+        created_post = json.loads(response.content)
+        request = self.factory.get("/api/")
+        response = get_post(request, created_post.get("post_id"))
+        post = json.loads(response.content)
+        self.assertEqual(
+            post.get("post").get("content_url"), created_post.get("content_url")
+        )
