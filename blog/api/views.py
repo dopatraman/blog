@@ -7,7 +7,8 @@ from blog.api.models import Post
 
 def get_all_posts(request):
     posts = Post.objects.all()
-    return JsonResponse({"posts": posts})
+    posts = map(lambda post: post.json(), posts)
+    return JsonResponse({"posts": list(posts)})
 
 
 def get_post(request, post_id):

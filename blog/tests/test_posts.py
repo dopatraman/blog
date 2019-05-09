@@ -1,6 +1,8 @@
 """
 PostTest
 """
+import json
+
 from django.test import TestCase, RequestFactory
 from blog.tests.factories.user import UserFactory
 from blog.api.views import create_post, get_all_posts
@@ -29,4 +31,6 @@ class PostTest(TestCase):
         create_post(request)
         request = self.factory.get("/api/")
         response = get_all_posts(request)
-        self.assertEqual(response.content, "")
+        posts = json.loads(response.content)
+        self.assertEquals(1, len(posts))
+        self.assertEquals(posts.get("posts")[0].get("user").get("id"), self.user.id)

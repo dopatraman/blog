@@ -1,10 +1,14 @@
 setup:
 	pip install pipenv
 	pip install black
+	pip install gnureadline
 	install
 
 env:
 	pipenv shell
+
+shell:
+	python -i scripts/shell.py
 
 install:
 	pipenv install
