@@ -21,9 +21,11 @@ class PostTest(TestCase):
     def test_create_post(self):
         request = self.factory.post("/api/create")
         request.user = self.user
-        create_post(request)
+        p = create_post(request)
+        p_json = json.loads(p.content)
         posts = Post.objects.all()
         self.assertEqual(posts.count(), 1)
+        self.assertEqual(p_json.get('post_id'), posts.get().id)
 
     def test_get_all_posts(self):
         request = self.factory.post("/api/create")

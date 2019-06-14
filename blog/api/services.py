@@ -23,3 +23,6 @@ class PostStorageService(object):
 
     def _get_post_title(self, post_content: str) -> str:
         return uuid4().__str__()
+
+class PostFormatterService(object):
+    pass
