@@ -9,4 +9,6 @@ from .controllers import ApiController
 #     path("<int:post_id>", views.get_post, name="get_post"),
 #     path("create", views.create_post, name="create_post"),
 # ]
-urlpatterns = ApiController.export(foo_service=(lambda x: x))
+urlpatterns = ApiController.export(
+    storage_service=(lambda x: x), formatter_service=(lambda x: x)
+)

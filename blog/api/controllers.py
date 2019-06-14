@@ -6,8 +6,8 @@ from django.http import HttpResponse, JsonResponse
 
 from blog.api.models import Post
 
-class ApiController(object):
 
+class ApiController(object):
     @staticmethod
     def export(**deps):
         ctrl = ApiController(**deps)
@@ -41,8 +41,12 @@ class ApiController(object):
         # The formatted json should also be written somewhere, so that
         # the client can fetch and display it
         formatted_post_json = self.formatter.format(post_content)
-        path_to_post = self.storage.write_to_disk(settings.POST_CONTENT_PATH, post_content)
-        path_to_formatted = self.storage.write_to_disk(settings.FORMATTED_POST_CONTENT_PATH, formatted_post_json)
+        path_to_post = self.storage.write_to_disk(
+            settings.POST_CONTENT_PATH, post_content
+        )
+        path_to_formatted = self.storage.write_to_disk(
+            settings.FORMATTED_POST_CONTENT_PATH, formatted_post_json
+        )
         return (path_to_post, path_to_formatted)
         # post_title = get_post_title(post_content)
         # if not os.path.exists(settings.POST_CONTENT_PATH):
