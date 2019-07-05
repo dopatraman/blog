@@ -14,10 +14,9 @@ defmodule ApiWeb.Router do
   end
 
   scope "/", ApiWeb do
-    pipe_through :browser
+    pipe_through :api
 
-    get "/", PageController, :index
-    get "/posts", PostsController, :index
+    resources "/posts", PostsController
   end
 
   # Other scopes may use custom stacks.
