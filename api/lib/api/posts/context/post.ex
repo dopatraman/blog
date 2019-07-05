@@ -5,6 +5,10 @@ defmodule Api.Post.Context do
   alias Api.Repo
   alias Api.Post.Schema, as: PostSchema
 
+  def insert_post(nil, _, _, _) do
+    {:error, :user_not_authorized}
+  end
+
   def insert_post(author, title, content, is_private) do
     %PostSchema{}
     |> Changeset.change()
@@ -19,10 +23,6 @@ defmodule Api.Post.Context do
       is_private: is_private
     })
     |> Repo.insert()
-  end
-
-  def insert_post(nil, _, _, _) do
-    {:error, :user_not_authorized}
   end
 
   def get_post(), do: :ok

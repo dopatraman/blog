@@ -7,11 +7,12 @@ defmodule Api.Post.ServiceTest do
 
   describe "create_post/4" do
     test "should create a post" do
-      {:ok, %PostSchema{
-        id: id,
-        title: "My Post",
-        content: "My Content"
-      }} = @post_service.create_post(3, "My Post", "My Content", false)
+      {:ok,
+       %PostSchema{
+         id: id,
+         title: "My Post",
+         content: "My Content"
+       }} = @post_service.create_post(3, "My Post", "My Content", false)
 
       assert !is_nil(id)
     end
