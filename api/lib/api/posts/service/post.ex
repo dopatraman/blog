@@ -24,7 +24,10 @@ defmodule Api.Post.Service do
   end
 
   def get_post_by_id(id) do
-    @post_context.get_post(id)
+    case @post_context.get_post(id) do
+      nil -> {:error, :does_not_exist}
+      post -> {:ok, post}
+    end
   end
 
   def get_posts_by_author(author_id, true = is_private) do

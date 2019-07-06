@@ -23,17 +23,32 @@ defmodule Api.Post.ServiceTest do
       assert !post.is_private
       assert !is_nil(post.id)
     end
+
+    test "should return an error for a non-existent user" do
+      {:error, _} =
+        @post_service.create_post(%{
+          "author_id" => 1,
+          "title" => "Hack 4 LuLz",
+          "content" => "Power Overwhelming",
+          "is_private" => false
+        })
+    end
   end
 
   describe "get_post_by_id/1" do
     test "should get a post" do
       control = insert(:post)
 
-      post = @post_service.get_post_by_id(control.id) |> Repo.preload(:author)
+      {:ok, post} = @post_service.get_post_by_id(control.id)
+      post = Repo.preload(post, :author)
 
       assert post.id == control.id
       assert post.title == control.title
       assert post.author.id == control.author.id
+    end
+
+    test "should return nil for a non-existent post" do
+      {:error, :does_not_exist} = @post_service.get_post_by_id(100)
     end
   end
 end

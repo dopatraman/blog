@@ -4,9 +4,7 @@ defmodule Api.Post.ContextBehaviour do
 
   @callback insert_post(
               author :: UserSchema.t(),
-              title :: String.t(),
-              content :: String.t(),
-              is_private :: boolean()
+              params :: term()
             ) :: {:ok, PostSchema.t()} | {:error, atom()}
 
   @callback get_post(id :: integer()) :: {:ok, PostSchema.t()} | {:error, atom()}
