@@ -8,7 +8,14 @@ defmodule Api.Post.ServiceTest do
   describe "create_post/4" do
     test "should create a post" do
       user = insert(:user)
-      {:ok, post} = @post_service.create_post(user.id, "My Post", "My Content", false)
+
+      {:ok, post} =
+        @post_service.create_post(%{
+          "author_id" => user.id,
+          "title" => "My Post",
+          "content" => "My Content",
+          "is_private" => false
+        })
 
       assert post.author_id == user.id
       assert post.title == "My Post"

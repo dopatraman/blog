@@ -9,19 +9,18 @@ defmodule Api.Post.Context do
     {:error, :user_not_authorized}
   end
 
-  def insert_post(author, title, content, is_private) do
+  def insert_post(
+        author,
+        %{
+          "title" => title,
+          "content" => content,
+          "is_private" => is_private
+        } = params
+      ) do
     %PostSchema{}
     |> Changeset.change()
     |> Changeset.put_change(:author_id, author.id)
-    |> Changeset.put_change(:title, title)
-    |> Changeset.put_change(:content, content)
-    |> Changeset.put_change(:is_private, is_private)
-    |> PostSchema.changeset(%{
-      author_id: author.id,
-      title: title,
-      content: content,
-      is_private: is_private
-    })
+    |> PostSchema.changeset(params)
     |> Repo.insert()
   end
 

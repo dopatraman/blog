@@ -5,7 +5,14 @@ defmodule Api.Post.Service do
   alias Api.Repo
   alias Api.User.Schema, as: UserSchema
 
-  def create_post(author_id, title, content, is_private) do
+  def create_post(
+        %{
+          "author_id" => author_id,
+          "title" => title,
+          "content" => content,
+          "is_private" => is_private
+        } = params
+      ) do
     # ensure access
     # validate input
     # validate business rules
@@ -13,7 +20,7 @@ defmodule Api.Post.Service do
     UserSchema
     |> Repo.get(author_id)
     |> ensure_access()
-    |> @post_context.insert_post(title, content, is_private)
+    |> @post_context.insert_post(params)
   end
 
   def get_post_by_id(id) do
