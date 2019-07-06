@@ -8,4 +8,8 @@ defmodule Api.Post.ContextBehaviour do
             ) :: {:ok, PostSchema.t()} | {:error, atom()}
 
   @callback get_post(id :: integer()) :: {:ok, PostSchema.t()} | {:error, atom()}
+
+  @callback get_private_posts(author :: UserSchema.t()) :: {:ok, [PostSchema.t()]} | {:error, atom()}
+
+  @callback get_public_posts(author :: UserSchema.t()) :: {:ok, [PostSchema.t()]} | {:error, atom()}
 end

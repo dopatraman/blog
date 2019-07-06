@@ -8,9 +8,9 @@ defmodule Api.Post.Service do
   def create_post(
         %{
           "author_id" => author_id,
-          "title" => title,
-          "content" => content,
-          "is_private" => is_private
+          "title" => _title,
+          "content" => _content,
+          "is_private" => _is_private
         } = params
       ) do
     # ensure access
@@ -30,10 +30,18 @@ defmodule Api.Post.Service do
     end
   end
 
-  def get_posts_by_author(author_id, true = is_private) do
+  def get_posts_by_author(author_id, true = _is_private) do
+    UserSchema
+    |> Repo.get(author_id)
+    |> ensure_access()
+    |> @post_context.get_private_posts()
   end
 
-  def get_posts_by_author(author_id, false = is_private) do
+  def get_posts_by_author(author_id, false = _is_private) do
+    UserSchema
+    |> Repo.get(author_id)
+    |> ensure_access()
+    |> @post_context.get_public_posts()
   end
 
   defp ensure_access(nil), do: nil
