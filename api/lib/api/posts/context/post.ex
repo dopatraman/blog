@@ -25,5 +25,9 @@ defmodule Api.Post.Context do
     |> Repo.insert()
   end
 
-  def get_post(), do: :ok
+  def get_post(id) do
+    #  TODO validate the id somehow, bs it's an external input
+    PostSchema
+    |> Repo.get(id)
+  end
 end

@@ -16,7 +16,8 @@ defmodule Api.Post.Service do
     |> @post_context.insert_post(title, content, is_private)
   end
 
-  def get_post_by_id(id, author_id) do
+  def get_post_by_id(id) do
+    @post_context.get_post(id)
   end
 
   def get_posts_by_author(author_id, true = is_private) do

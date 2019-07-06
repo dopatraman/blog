@@ -9,8 +9,7 @@ defmodule Api.Post.ServiceBehaviour do
             ) :: {:ok, PostSchema.t()} | {:error, atom()}
 
   @callback get_post_by_id(
-              id :: integer(),
-              author_id :: integer()
+              id :: integer()
             ) :: {:ok, PostSchema.t()} | {:error, atom()}
 
   @callback get_posts_by_author(

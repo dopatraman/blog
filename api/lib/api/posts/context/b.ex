@@ -8,5 +8,6 @@ defmodule Api.Post.ContextBehaviour do
               content :: String.t(),
               is_private :: boolean()
             ) :: {:ok, PostSchema.t()} | {:error, atom()}
-  @callback get_post() :: {:ok, PostSchema.t()} | {:error, atom()}
+
+  @callback get_post(id :: integer()) :: {:ok, PostSchema.t()} | {:error, atom()}
 end
