@@ -13,14 +13,13 @@ defmodule Api.Post.Service do
           "is_private" => _is_private
         } = params
       ) do
-    # ensure access
-    # validate input
-    # validate business rules
-    # call context
     UserSchema
     |> Repo.get(author_id)
     |> ensure_access()
-    |> @post_context.insert_post(params)
+    |> case do
+      nil -> {:error, :not_authorized}
+      user -> @post_context.insert_post(user, params)
+    end
   end
 
   def get_post_by_id(id) do

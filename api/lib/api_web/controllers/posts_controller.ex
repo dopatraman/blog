@@ -19,7 +19,14 @@ defmodule ApiWeb.PostsController do
   def show(conn, _params), do: :ok
 
   # POST /posts
-  def create(conn, _params), do: :ok
+  def create(conn, params) do
+    params
+    |> @post_service.create_post()
+    |> case do
+      {:ok, post} -> json(conn, post)
+      {:error, _} -> put_status(conn, 500)
+    end
+  end
 
   # PATCH/PUT /posts/:id
   def update(conn, _params), do: :ok

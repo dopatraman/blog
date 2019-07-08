@@ -8,10 +8,6 @@ defmodule Api.Post.Context do
   alias Api.Post.Schema, as: PostSchema
   alias Api.User.Schema, as: UserSchema
 
-  def insert_post(nil, _) do
-    {:error, :user_not_authorized}
-  end
-
   def insert_post(author, params) do
     %PostSchema{}
     |> Changeset.change()
