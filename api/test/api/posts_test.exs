@@ -35,6 +35,37 @@ defmodule Api.Post.ServiceTest do
     end
   end
 
+  describe "update_post" do
+    test "should update an existing post" do
+      author = insert(:user)
+      post = insert(:post, author: author)
+
+      new_post = %{
+        "author_id" => author.id,
+        "title" => "Updated Title",
+        "content" => "Updated Content",
+        "is_private" => false
+      }
+
+      {:ok, post} = @post_service.update_post(post.id, new_post)
+      assert post.title == "Updated Title"
+      assert post.content == "Updated Content"
+    end
+
+    test "should return an error if updating a non-existent post" do
+      author = insert(:user)
+
+      new_post = %{
+        "author_id" => author.id,
+        "title" => "Updated Title",
+        "content" => "Updated Content",
+        "is_private" => false
+      }
+
+      {:error, _} = @post_service.update_post(1000, new_post)
+    end
+  end
+
   describe "get_posts_by_author/1" do
     test "should get all posts for an author" do
       author1 = insert(:user)

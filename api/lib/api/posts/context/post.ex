@@ -16,6 +16,12 @@ defmodule Api.Post.Context do
     |> Repo.insert()
   end
 
+  def update_post(post, params) do
+    Changeset.change(post)
+    |> PostSchema.changeset(params)
+    |> Repo.update()
+  end
+
   def get_post(id) do
     #  TODO validate the id somehow, bs it's an external input
     PostSchema

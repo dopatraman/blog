@@ -19,13 +19,18 @@ defmodule ApiWeb.PostsControllerTest do
 
   test "POST /posts", %{conn: conn} do
     author = insert(:user)
-    resp = post(conn, Routes.posts_path(Endpoint, :create, %{
-      "author_id" => author.id,
-      "title" => "My New Post",
-      "content" => "Hahaha",
-      "is_private" => false
-    }))
-    |> json_response(200)
+
+    resp =
+      post(
+        conn,
+        Routes.posts_path(Endpoint, :create, %{
+          "author_id" => author.id,
+          "title" => "My New Post",
+          "content" => "Hahaha",
+          "is_private" => false
+        })
+      )
+      |> json_response(200)
 
     assert resp["author_id"] == author.id
     assert resp["title"] == "My New Post"

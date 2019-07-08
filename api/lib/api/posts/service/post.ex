@@ -3,6 +3,7 @@ defmodule Api.Post.Service do
   @post_context Application.get_env(:api, :post_context)
 
   alias Api.Repo
+  alias Api.Post.Schema, as: PostSchema
   alias Api.User.Schema, as: UserSchema
 
   def create_post(
@@ -18,6 +19,27 @@ defmodule Api.Post.Service do
     |> case do
       nil -> {:error, :does_not_exist}
       user -> @post_context.insert_post(user, params)
+    end
+  end
+
+  def update_post(
+        post_id,
+        %{
+          "author_id" => author_id,
+          "title" => _title,
+          "content" => _content,
+          "is_private" => _is_private
+        } = params
+      ) do
+    post = Repo.get(PostSchema, post_id)
+    user = Repo.get(UserSchema, author_id)
+
+    case {user, post} do
+      {user, post} when not is_nil(user) and not is_nil(post) ->
+        @post_context.update_post(post, params)
+
+      _ ->
+        {:error, :does_not_exist}
     end
   end
 

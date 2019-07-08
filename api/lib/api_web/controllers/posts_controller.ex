@@ -22,4 +22,8 @@ defmodule ApiWeb.PostsController do
       {:error, _} -> put_status(conn, 500)
     end
   end
+
+  # PATCH /posts/:id
+  def update(conn, params) do
+  end
 end
