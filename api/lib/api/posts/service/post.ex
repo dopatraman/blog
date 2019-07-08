@@ -35,11 +35,9 @@ defmodule Api.Post.Service do
     user = Repo.get(UserSchema, author_id)
 
     case {user, post} do
-      {user, post} when not is_nil(user) and not is_nil(post) ->
-        @post_context.update_post(post, params)
-
-      _ ->
-        {:error, :does_not_exist}
+      {nil, _} -> {:error, :does_not_exist}
+      {_, nil} -> {:error, :does_not_exist}
+      {_, post} -> @post_context.update_post(post, params)
     end
   end
 
