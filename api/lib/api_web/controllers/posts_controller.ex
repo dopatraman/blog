@@ -9,6 +9,10 @@ defmodule ApiWeb.PostsController do
     json(conn, posts)
   end
 
+  def show(conn, %{"id" => post_id, "author_id" => author_id}) do
+    post = @post_service.get_post_by_id(author_id, post_id)
+  end
+
   # POST /posts
   def create(conn, params) do
     params

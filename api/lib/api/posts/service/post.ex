@@ -15,27 +15,27 @@ defmodule Api.Post.Service do
       ) do
     UserSchema
     |> Repo.get(author_id)
-    |> ensure_access()
     |> case do
-      nil -> {:error, :not_authorized}
+      nil -> {:error, :does_not_exist}
       user -> @post_context.insert_post(user, params)
     end
   end
 
-  def get_post_by_id(id) do
-    case @post_context.get_post(id) do
+  def get_post_by_id(author_id, post_id) do
+    UserSchema
+    |> Repo.get(author_id)
+    |> case do
       nil -> {:error, :does_not_exist}
-      post -> {:ok, post}
+      _ -> {:ok, @post_context.get_post(post_id)}
     end
   end
 
   def get_posts_by_author(author_id) do
     UserSchema
     |> Repo.get(author_id)
-    |> ensure_access()
-    |> @post_context.get_all_posts()
+    |> case do
+      nil -> {:error, :does_not_exist}
+      user -> @post_context.get_all_posts(user)
+    end
   end
-
-  defp ensure_access(nil), do: nil
-  defp ensure_access(user), do: user
 end

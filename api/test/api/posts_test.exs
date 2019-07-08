@@ -35,11 +35,28 @@ defmodule Api.Post.ServiceTest do
     end
   end
 
-  describe "get_post_by_id/1" do
-    test "should get a post" do
-      control = insert(:post)
+  describe "get_posts_by_author/1" do
+    test "should get all posts for an author" do
+      author1 = insert(:user)
+      author2 = insert(:user)
+      post1 = insert(:post, author: author1)
+      post2 = insert(:post, author: author1)
+      _post3 = insert(:post, author: author2)
 
-      {:ok, post} = @post_service.get_post_by_id(control.id)
+      [p1, p2] = @post_service.get_posts_by_author(author1.id)
+      assert p1.id == post1.id
+      assert p1.author_id == author1.id
+      assert p2.id == post2.id
+      assert p2.author_id == author1.id
+    end
+  end
+
+  describe "get_post_by_id/2" do
+    test "should get a post" do
+      author = insert(:user)
+      control = insert(:post, author: author)
+
+      {:ok, post} = @post_service.get_post_by_id(author.id, control.id)
       post = Repo.preload(post, :author)
 
       assert post.id == control.id
@@ -48,7 +65,8 @@ defmodule Api.Post.ServiceTest do
     end
 
     test "should return nil for a non-existent post" do
-      {:error, :does_not_exist} = @post_service.get_post_by_id(100)
+      author = insert(:user)
+      {:ok, nil} = @post_service.get_post_by_id(author.id, 100)
     end
   end
 end

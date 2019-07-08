@@ -3,7 +3,7 @@ defmodule Api.Post.ServiceBehaviour do
 
   @callback create_post(params :: term()) :: {:ok, PostSchema.t()} | {:error, atom()}
 
-  @callback get_post_by_id(id :: integer()) :: {:ok, PostSchema.t()} | {:error, atom()}
+  @callback get_post_by_id(author_id :: integer(), id :: integer()) :: {:ok, PostSchema.t()} | {:error, atom()}
 
   @callback get_posts_by_author(author_id :: integer()) :: [PostSchema.t()]
 end

@@ -16,11 +16,6 @@ defmodule ApiWeb.Router do
   scope "/", ApiWeb do
     pipe_through :api
 
-    resources "/posts", PostsController, only: [:index, :create]
+    resources "/posts", PostsController, only: [:create, :index, :show]
   end
-
-  # Other scopes may use custom stacks.
-  # scope "/api", ApiWeb do
-  #   pipe_through :api
-  # end
 end
