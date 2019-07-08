@@ -9,15 +9,6 @@ defmodule ApiWeb.PostsController do
     json(conn, posts)
   end
 
-  # GET /posts/:id/edit
-  def edit(conn, _params), do: :ok
-
-  # GET /posts/new
-  def new(conn, _params), do: :ok
-
-  # GET /posts/:id
-  def show(conn, _params), do: :ok
-
   # POST /posts
   def create(conn, params) do
     params
@@ -27,10 +18,4 @@ defmodule ApiWeb.PostsController do
       {:error, _} -> put_status(conn, 500)
     end
   end
-
-  # PATCH/PUT /posts/:id
-  def update(conn, _params), do: :ok
-
-  # DELETE /posts/:id
-  def delete(conn, _params), do: :ok
 end
