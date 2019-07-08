@@ -26,6 +26,12 @@ defmodule Api.Post.Context do
     |> Repo.get(id)
   end
 
+  def get_all_posts(author) do
+    PostSchema
+    |> for_author(author)
+    |> Repo.all()
+  end
+
   def get_private_posts(author) do
     PostSchema
     |> for_author(author)

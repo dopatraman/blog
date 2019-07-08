@@ -12,6 +12,7 @@ defmodule Api.Post.Schema do
           is_private: boolean()
         }
 
+  @derive {Jason.Encoder, only: [:author_id, :content, :is_private, :title]}
   schema "posts" do
     belongs_to :author, UserSchema
     field :content, :string

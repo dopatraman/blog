@@ -7,9 +7,11 @@ defmodule Api.Post.ContextBehaviour do
               params :: term()
             ) :: {:ok, PostSchema.t()} | {:error, atom()}
 
-  @callback get_post(id :: integer()) :: {:ok, PostSchema.t()} | {:error, atom()}
+  @callback get_post(id :: integer()) :: PostSchema.t() | nil
 
-  @callback get_private_posts(author :: UserSchema.t()) :: {:ok, [PostSchema.t()]} | {:error, atom()}
+  @callback get_all_posts(author :: UserSchema.t()) :: [PostSchema.t()]
 
-  @callback get_public_posts(author :: UserSchema.t()) :: {:ok, [PostSchema.t()]} | {:error, atom()}
+  @callback get_private_posts(author :: UserSchema.t()) :: [PostSchema.t()]
+
+  @callback get_public_posts(author :: UserSchema.t()) :: [PostSchema.t()]
 end

@@ -5,8 +5,5 @@ defmodule Api.Post.ServiceBehaviour do
 
   @callback get_post_by_id(id :: integer()) :: {:ok, PostSchema.t()} | {:error, atom()}
 
-  @callback get_posts_by_author(
-              author_id :: integer(),
-              is_private :: boolean()
-            ) :: {:ok, [PostSchema.t()]} | {:error, atom()}
+  @callback get_posts_by_author(author_id :: integer()) :: [PostSchema.t()]
 end
