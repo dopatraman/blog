@@ -1,6 +1,14 @@
 defmodule ApiWeb.Router do
   use ApiWeb, :router
 
+  pipeline :from_verification do
+    plug Api.Auth.FromVerificationPipeline
+  end
+
+  pipeline :protected do
+    plug Guardian.Plug.EnsureAuthenticated
+  end
+
   pipeline :browser do
     plug :accepts, ["html"]
     plug :fetch_session
@@ -14,8 +22,16 @@ defmodule ApiWeb.Router do
   end
 
   scope "/", ApiWeb do
-    pipe_through :api
+    pipe_through [:api, :from_verification]
 
+    resources "/", PageController, only: [:index]
+    get "/login", SessionController, :index
+    post "/login", SessionController, :login
+    post "/logout", SessionController, :logout
+  end
+
+  scope "/posts", ApiWeb do
+    pipe_through [:api, :from_verification, :protected]
     resources "/posts", PostsController, only: [:create, :index, :show]
   end
 end

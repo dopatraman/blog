@@ -43,6 +43,9 @@ defmodule Api.MixProject do
       {:gettext, "~> 0.11"},
       {:jason, "~> 1.0"},
       {:plug_cowboy, "~> 2.0"},
+      {:guardian, "~> 1.2.1"},
+      {:comeonin, "~> 5.1.2"},
+      {:bcrypt_elixir, "~> 2.0"},
       {:ex_machina, "~> 2.3", only: :test},
       {:faker, "~> 0.12", only: :test}
     ]

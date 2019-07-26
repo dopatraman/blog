@@ -16,7 +16,8 @@ defmodule Api.Factory do
   def user_factory do
     %UserSchema{
       username: Faker.Pokemon.name(),
-      email: Faker.Internet.email()
+      email: Faker.Internet.email(),
+      password: "Password"
     }
   end
 end

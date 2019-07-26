@@ -4,10 +4,20 @@ defmodule ApiWeb.PostsControllerTest do
   import Api.Factory
   use ApiWeb.ConnCase
 
-  test "GET /posts", %{conn: conn} do
+  setup %{conn: conn, bypass_auth: true} do
     author = insert(:user)
     post = insert(:post, author: author)
 
+    {:ok, token, _} = Api.Auth.Guardian.encode_and_sign(author, %{}, token_type: :access)
+    %{
+      conn: put_req_header(conn, "authorization", "Bearer: " <> token),
+      author: author,
+      post: post
+     }
+  end
+
+  @tag :bypass_auth
+  test "GET /posts", %{conn: conn, author: author, post: post} do
     [resp_post] =
       get(conn, Routes.posts_path(Endpoint, :index, author_id: author.id))
       |> json_response(200)
@@ -17,9 +27,8 @@ defmodule ApiWeb.PostsControllerTest do
     assert resp_post["title"] == post.title
   end
 
-  test "POST /posts", %{conn: conn} do
-    author = insert(:user)
-
+  @tag :bypass_auth
+  test "POST /posts", %{conn: conn, author: author} do
     resp =
       post(
         conn,
