@@ -10,7 +10,10 @@ defmodule ApiWeb.PostsController do
   end
 
   def show(conn, %{"id" => post_id, "author_id" => author_id}) do
-    post = @post_service.get_post_by_id(author_id, post_id)
+    case @post_service.get_post_by_id(author_id, post_id) do
+      {:ok, post} -> put_status(conn, 200) |> json(post)
+      _ -> put_status(conn, 500) |> json(:error)
+    end
   end
 
   # POST /posts
@@ -21,9 +24,5 @@ defmodule ApiWeb.PostsController do
       {:ok, post} -> json(conn, post)
       {:error, _} -> put_status(conn, 500)
     end
-  end
-
-  # PATCH /posts/:id
-  def update(conn, params) do
   end
 end

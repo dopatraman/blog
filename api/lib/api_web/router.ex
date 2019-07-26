@@ -32,6 +32,11 @@ defmodule ApiWeb.Router do
 
   scope "/posts", ApiWeb do
     pipe_through [:api, :from_verification, :protected]
-    resources "/posts", PostsController, only: [:create, :index, :show]
+    resources "/", PostsController, only: [:create]
+  end
+
+  scope "/posts", ApiWeb do
+    pipe_through [:api]
+    resources "/", PostsController, only: [:index, :show]
   end
 end
