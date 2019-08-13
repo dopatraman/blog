@@ -13,8 +13,13 @@ defmodule ApiWeb.SessionController do
   end
 
   defp login_reply({:ok, user}, conn) do
+    conn = Guardian.Plug.sign_in(conn, user)
+    token = Guardian.Plug.current_token(conn)
+    %{"exp" => exp} = Guardian.Plug.current_claims(conn)
+
     conn
-    |> Guardian.Plug.sign_in(user)
+    |> put_resp_header("authorization", "Bearer #{token}")
+    |> put_resp_header("x-expires", "#{exp}")
     |> json(:ok)
   end
 

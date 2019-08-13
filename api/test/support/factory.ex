@@ -13,11 +13,15 @@ defmodule Api.Factory do
     }
   end
 
+  # BCrypt makes this factory slow
+  # Use a derived factory instead
+  # for user_with_encrypted_pw and not
+  # https://github.com/thoughtbot/ex_machina
   def user_factory do
     %UserSchema{
       username: Faker.Pokemon.name(),
       email: Faker.Internet.email(),
-      password: "Password"
+      password: Bcrypt.hash_pwd_salt(Faker.Lorem.word())
     }
   end
 end

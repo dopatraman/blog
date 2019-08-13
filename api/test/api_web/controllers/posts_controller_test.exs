@@ -2,20 +2,39 @@ defmodule ApiWeb.PostsControllerTest do
   alias ApiWeb.Router.Helpers, as: Routes
   alias ApiWeb.Endpoint
   import Api.Factory
+  import Plug.Conn, only: [get_resp_header: 2, put_req_header: 3]
   use ApiWeb.ConnCase
 
-  defp add_auth_header(conn, user) do
-    {:ok, token, _} = Api.Auth.Guardian.encode_and_sign(user, %{}, token_type: :access)
-    put_req_header(conn, "authorization", "Bearer: " <> token)
+  defp login(conn, user, raw_password) do
+    [token] =
+      conn
+      |> put_req_header("content-type", "application/json")
+      |> post(
+        Routes.session_path(Endpoint, :login,
+          user: %{
+            "username" => user.username,
+            "password" => raw_password
+          }
+        )
+      )
+      |> get_resp_header("authorization")
+
+    {:ok, token}
+  end
+
+  defp add_auth_header(conn, user, raw_password) do
+    {:ok, token} = login(conn, user, raw_password)
+    put_req_header(conn, "authorization", token)
   end
 
   setup %{conn: conn, needs_auth: needs_auth} do
-    author = insert(:user)
+    raw_password = "pwnage"
+    author = insert(:user, password: Bcrypt.hash_pwd_salt(raw_password))
     post = insert(:post, author: author)
 
     conn =
       case needs_auth do
-        true -> add_auth_header(conn, author)
+        true -> add_auth_header(conn, author, raw_password)
         _ -> conn
       end
 
@@ -49,7 +68,7 @@ defmodule ApiWeb.PostsControllerTest do
   end
 
   @tag needs_auth: true
-  test "POST /posts", %{conn: conn, author: author} do
+  test "POST /posts with access controls", %{conn: conn, author: author} do
     resp =
       post(
         conn,

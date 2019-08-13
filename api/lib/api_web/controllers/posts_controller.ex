@@ -17,12 +17,15 @@ defmodule ApiWeb.PostsController do
   end
 
   # POST /posts
-  def create(conn, params) do
+  def create(%Plug.Conn{assigns: %{current_user_id: author_id}} = conn, params) do
     params
+    |> Map.put("author_id", author_id)
     |> @post_service.create_post()
     |> case do
       {:ok, post} -> json(conn, post)
-      {:error, _} -> put_status(conn, 500)
+      {:error, _} -> put_status(conn, 500) |> json(:error)
     end
   end
+
+  def create(conn, _), do: put_status(conn, 500) |> json(:error)
 end

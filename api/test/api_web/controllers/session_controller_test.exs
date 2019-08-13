@@ -2,16 +2,15 @@ defmodule ApiWeb.SessionControllerTest do
   alias ApiWeb.Router.Helpers, as: Routes
   alias ApiWeb.Endpoint
   import Api.Factory
-  import Plug.Conn, only: [put_req_header: 3]
+  import Plug.Conn, only: [get_resp_header: 2]
   use ApiWeb.ConnCase
 
-  test "login", %{conn: conn} do
+  test "get login token successfully", %{conn: conn} do
     raw_password = "password"
     user = insert(:user, password: Bcrypt.hash_pwd_salt(raw_password))
-    {:ok, token, _} = Api.Auth.Guardian.encode_and_sign(user, %{}, token_type: :access)
 
-    _resp =
-      put_req_header(conn, "authorization", "Bearer #{token}")
+    resp =
+      conn
       |> put_req_header("content-type", "application/json")
       |> post(
         Routes.session_path(Endpoint, :login,
@@ -21,17 +20,21 @@ defmodule ApiWeb.SessionControllerTest do
           }
         )
       )
-      |> json_response(200)
+
+    [token] = get_resp_header(resp, "authorization")
+
+    assert token !== nil
+
+    json_response(resp, 200)
   end
 
   test "bad login", %{conn: conn} do
     bad_raw_password = "bad_password"
     raw_password = "password"
     user = insert(:user, password: Bcrypt.hash_pwd_salt(raw_password))
-    {:ok, token, _} = Api.Auth.Guardian.encode_and_sign(user, %{}, token_type: :access)
 
     _resp =
-      put_req_header(conn, "authorization", "Bearer #{token}")
+      conn
       |> put_req_header("content-type", "application/json")
       |> post(
         Routes.session_path(Endpoint, :login,
