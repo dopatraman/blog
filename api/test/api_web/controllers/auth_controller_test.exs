@@ -1,4 +1,4 @@
-defmodule ApiWeb.SessionControllerTest do
+defmodule ApiWeb.AuthControllerTest do
   alias ApiWeb.Router.Helpers, as: Routes
   alias ApiWeb.Endpoint
   import Api.Factory
@@ -13,7 +13,7 @@ defmodule ApiWeb.SessionControllerTest do
       conn
       |> put_req_header("content-type", "application/json")
       |> post(
-        Routes.session_path(Endpoint, :login,
+        Routes.auth_path(Endpoint, :login,
           user: %{
             "username" => user.username,
             "password" => raw_password
@@ -37,7 +37,7 @@ defmodule ApiWeb.SessionControllerTest do
       conn
       |> put_req_header("content-type", "application/json")
       |> post(
-        Routes.session_path(Endpoint, :login,
+        Routes.auth_path(Endpoint, :login,
           user: %{
             "username" => user.username,
             "password" => bad_raw_password

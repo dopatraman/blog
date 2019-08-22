@@ -1,4 +1,4 @@
-defmodule ApiWeb.SessionController do
+defmodule ApiWeb.AuthController do
   use ApiWeb, :controller
 
   @auth_service Application.get_env(:api, :auth_service)

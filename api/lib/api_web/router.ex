@@ -25,7 +25,7 @@ defmodule ApiWeb.Router do
     pipe_through [:api, :from_verification]
 
     resources "/", PageController, only: [:index]
-    get "/login", SessionController, :index
+    get "/login", AuthController, :index
   end
 
   scope "/posts", ApiWeb do
@@ -35,8 +35,8 @@ defmodule ApiWeb.Router do
 
   scope "/posts", ApiWeb do
     pipe_through [:api]
-    post "/login", SessionController, :login
-    post "/logout", SessionController, :logout
+    post "/login", AuthController, :login
+    post "/logout", AuthController, :logout
     resources "/", PostsController, only: [:index, :show]
   end
 end

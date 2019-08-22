@@ -10,7 +10,7 @@ defmodule ApiWeb.PostsControllerTest do
       conn
       |> put_req_header("content-type", "application/json")
       |> post(
-        Routes.session_path(Endpoint, :login,
+        Routes.auth_path(Endpoint, :login,
           user: %{
             "username" => user.username,
             "password" => raw_password
