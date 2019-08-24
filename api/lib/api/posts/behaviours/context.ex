@@ -10,8 +10,4 @@ defmodule Api.Posts.ContextBehaviour do
   @callback get_post(id :: integer()) :: PostSchema.t() | nil
 
   @callback get_all_posts(author :: UserSchema.t()) :: [PostSchema.t()]
-
-  @callback get_private_posts(author :: UserSchema.t()) :: [PostSchema.t()]
-
-  @callback get_public_posts(author :: UserSchema.t()) :: [PostSchema.t()]
 end

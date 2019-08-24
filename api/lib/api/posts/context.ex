@@ -27,38 +27,15 @@ defmodule Api.Posts.Context do
     |> Repo.get(id)
   end
 
-  def get_all_posts(author) do
-    PostSchema
-    |> for_author(author)
+  def get_all_posts(author_id) do
+    UserSchema
+    |> Repo.get(author_id)
+    |> for_author()
     |> Repo.all()
   end
 
-  def get_private_posts(author) do
-    PostSchema
-    |> for_author(author)
-    |> only_private()
-    |> Repo.all()
-  end
-
-  def get_public_posts(author) do
-    PostSchema
-    |> for_author(author)
-    |> only_public()
-    |> Repo.all()
-  end
-
-  @spec for_author(PostSchema | Query.t(), UserSchema.t()) :: Query.t()
-  defp for_author(query, author) do
-    from a in query, where: a.author_id == ^author.id
-  end
-
-  @spec only_private(PostSchema | Query.t()) :: Query.t()
-  defp only_private(query) do
-    from a in query, where: a.is_private == true
-  end
-
-  @spec only_private(PostSchema | Query.t()) :: Query.t()
-  defp only_public(query) do
-    from a in query, where: a.is_private == false
+  @spec for_author(UserSchema.t()) :: Query.t()
+  defp for_author(author) do
+    from p in PostSchema, where: p.author_id == ^author.id
   end
 end

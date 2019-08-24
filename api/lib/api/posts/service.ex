@@ -41,21 +41,14 @@ defmodule Api.Posts.Service do
     end
   end
 
-  def get_post_by_id(author_id, post_id) do
-    UserSchema
-    |> Repo.get(author_id)
-    |> case do
+  def get_post_by_id(post_id) do
+    case @post_context.get_post(post_id) do
       nil -> {:error, :does_not_exist}
-      _ -> {:ok, @post_context.get_post(post_id)}
+      user -> {:ok, user}
     end
   end
 
   def get_posts_by_author(author_id) do
-    UserSchema
-    |> Repo.get(author_id)
-    |> case do
-      nil -> {:error, :does_not_exist}
-      user -> @post_context.get_all_posts(user)
-    end
+    @post_context.get_all_posts(author_id)
   end
 end

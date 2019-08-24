@@ -1,7 +1,6 @@
 defmodule Api.Posts.ServiceTest do
   use ApiWeb.ConnCase
   import Api.Factory
-  alias Api.Repo
 
   @post_service Application.get_env(:api, :post_service)
 
@@ -79,25 +78,6 @@ defmodule Api.Posts.ServiceTest do
       assert p1.author_id == author1.id
       assert p2.id == post2.id
       assert p2.author_id == author1.id
-    end
-  end
-
-  describe "get_post_by_id/2" do
-    test "should get a post" do
-      author = insert(:user)
-      control = insert(:post, author: author)
-
-      {:ok, post} = @post_service.get_post_by_id(author.id, control.id)
-      post = Repo.preload(post, :author)
-
-      assert post.id == control.id
-      assert post.title == control.title
-      assert post.author.id == control.author.id
-    end
-
-    test "should return nil for a non-existent post" do
-      author = insert(:user)
-      {:ok, nil} = @post_service.get_post_by_id(author.id, 100)
     end
   end
 end

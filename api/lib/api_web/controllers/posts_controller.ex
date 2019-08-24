@@ -9,8 +9,8 @@ defmodule ApiWeb.PostsController do
     json(conn, posts)
   end
 
-  def show(conn, %{"id" => post_id, "author_id" => author_id}) do
-    case @post_service.get_post_by_id(author_id, post_id) do
+  def show(conn, %{"id" => post_id}) do
+    case @post_service.get_post_by_id(post_id) do
       {:ok, post} -> put_status(conn, 200) |> json(post)
       _ -> put_status(conn, 500) |> json(:error)
     end
