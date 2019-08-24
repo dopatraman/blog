@@ -7,6 +7,7 @@ defmodule Api.Repo.Migrations.CreatePosts do
       add :content, :text
       add :title, :string
       add :is_private, :boolean, default: false, null: false
+      add :is_processed, :boolean, default: false, null: false
 
       timestamps()
     end
