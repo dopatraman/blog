@@ -1,5 +1,5 @@
-defmodule Api.Post.ServiceBehaviour do
-  alias Api.Post.Schema, as: PostSchema
+defmodule Api.Posts.ServiceBehaviour do
+  alias Api.Posts.Schema, as: PostSchema
 
   @callback create_post(params :: term()) :: {:ok, PostSchema.t()} | {:error, atom()}
 

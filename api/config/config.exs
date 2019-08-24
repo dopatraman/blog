@@ -41,7 +41,7 @@ config :api, Api.Auth.Guardian,
 import_config "#{Mix.env()}.exs"
 
 # DI
-config :api, :post_service, Api.Post.Service
-config :api, :post_context, Api.Post.Context
+config :api, :post_service, Api.Posts.Service
+config :api, :post_context, Api.Posts.Context
 config :api, :auth_service, Api.Auth.Service
 config :api, :auth_context, Api.Auth.Context

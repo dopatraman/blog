@@ -1,9 +1,9 @@
-defmodule Api.Post.Service do
-  @behaviour Api.Post.ServiceBehaviour
+defmodule Api.Posts.Service do
+  @behaviour Api.Posts.ServiceBehaviour
   @post_context Application.get_env(:api, :post_context)
 
   alias Api.Repo
-  alias Api.Post.Schema, as: PostSchema
+  alias Api.Posts.Schema, as: PostSchema
   alias Api.User.Schema, as: UserSchema
 
   def create_post(

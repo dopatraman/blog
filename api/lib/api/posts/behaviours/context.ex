@@ -1,5 +1,5 @@
-defmodule Api.Post.ContextBehaviour do
-  alias Api.Post.Schema, as: PostSchema
+defmodule Api.Posts.ContextBehaviour do
+  alias Api.Posts.Schema, as: PostSchema
   alias Api.User.Schema, as: UserSchema
 
   @callback insert_post(

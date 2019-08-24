@@ -15,7 +15,7 @@ defmodule Api.User.Schema do
     field :email, :string
     field :username, :string
     field :password, :string
-    has_many :posts, Api.Post.Schema
+    has_many :posts, Api.Posts.Schema
 
     timestamps()
   end

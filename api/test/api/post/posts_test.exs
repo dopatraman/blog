@@ -1,4 +1,4 @@
-defmodule Api.Post.ServiceTest do
+defmodule Api.Posts.ServiceTest do
   use ApiWeb.ConnCase
   import Api.Factory
   alias Api.Repo

@@ -1,7 +1,7 @@
-defmodule Api.Post.Schema do
+defmodule Api.Posts.Schema do
   use Ecto.Schema
   import Ecto.Changeset
-  alias Api.Post.Schema, as: PostSchema
+  alias Api.Posts.Schema, as: PostSchema
   alias Api.User.Schema, as: UserSchema
 
   @type t() :: %PostSchema{

@@ -1,7 +1,7 @@
 defmodule Api.Factory do
   use ExMachina.Ecto, repo: Api.Repo
 
-  alias Api.Post.Schema, as: PostSchema
+  alias Api.Posts.Schema, as: PostSchema
   alias Api.User.Schema, as: UserSchema
 
   def post_factory do
