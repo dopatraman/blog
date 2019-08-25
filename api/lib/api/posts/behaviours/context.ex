@@ -9,5 +9,5 @@ defmodule Api.Posts.ContextBehaviour do
 
   @callback get_post(id :: integer()) :: PostSchema.t() | nil
 
-  @callback get_all_posts(author :: UserSchema.t()) :: [PostSchema.t()]
+  @callback get_all_posts(author :: UserSchema.t()) :: [PostSchema.t()] | {:error, atom()}
 end

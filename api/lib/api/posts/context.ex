@@ -8,7 +8,7 @@ defmodule Api.Posts.Context do
   alias Api.Posts.Schema, as: PostSchema
   alias Api.User.Schema, as: UserSchema
 
-  def insert_post(author, params) do
+  def insert_post(%UserSchema{} = author, params) do
     %PostSchema{}
     |> Changeset.change()
     |> Changeset.put_change(:author_id, author.id)
@@ -16,7 +16,7 @@ defmodule Api.Posts.Context do
     |> Repo.insert()
   end
 
-  def update_post(post, params) do
+  def update_post(%PostSchema{} = post, params) do
     Changeset.change(post)
     |> PostSchema.changeset(params)
     |> Repo.update()
@@ -30,8 +30,10 @@ defmodule Api.Posts.Context do
   def get_all_posts(author_id) do
     UserSchema
     |> Repo.get(author_id)
-    |> for_author()
-    |> Repo.all()
+    |> case do
+      nil -> {:error, :no_user}
+      user -> Repo.all(for_author(user))
+    end
   end
 
   @spec for_author(UserSchema.t()) :: Query.t()

@@ -9,10 +9,12 @@ defmodule Api.Factory do
       author: build(:user),
       title: "My Post",
       content: "My Content",
-      is_private: false
+      is_private: false,
+      is_processed: false
     }
   end
 
+  # NOTE:
   # BCrypt makes this factory slow
   # Use a derived factory instead
   # for user_with_encrypted_pw and not
