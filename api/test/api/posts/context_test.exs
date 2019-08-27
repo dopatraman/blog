@@ -5,11 +5,12 @@ defmodule Api.Posts.ContextTest do
   @post_context Application.get_env(:api, :post_context)
 
   describe "insert_post/2" do
-    test "should insert a post for a user and params" do
+    test "should insert a post for a user_id and params" do
       author = insert(:user)
 
       {:ok, post} =
-        @post_context.insert_post(author, %{
+        @post_context.insert_post(%{
+          "author_id" => author.id,
           "title" => "Title",
           "content" => "Content"
         })
@@ -20,11 +21,10 @@ defmodule Api.Posts.ContextTest do
     end
 
     # Note: good candidate for property test
-    test "should not function match for non-user arguments" do
-      post = insert(:post)
-
+    test "should not function match for non-integer arguments" do
       assert_raise FunctionClauseError, fn ->
-        @post_context.insert_post(%{id: post.id}, %{
+        @post_context.insert_post(%{
+          "author_id" => "hello",
           "title" => "Title",
           "content" => "Content"
         })
@@ -35,7 +35,8 @@ defmodule Api.Posts.ContextTest do
       author = insert(:user)
 
       {:error, %{valid?: false}} =
-        @post_context.insert_post(author, %{
+        @post_context.insert_post(%{
+          "author_id" => author.id,
           "content" => "Content"
         })
     end
@@ -44,37 +45,14 @@ defmodule Api.Posts.ContextTest do
       author = insert(:user)
 
       {:error, %{valid?: false}} =
-        @post_context.insert_post(author, %{
+        @post_context.insert_post(%{
+          "author_id" => author.id,
           "title" => "Title"
         })
     end
   end
 
-  describe "update_post/2" do
-    test "should update a post" do
-      post = insert(:post)
-
-      {:ok, new_post} =
-        @post_context.update_post(post, %{
-          "title" => "New Title"
-        })
-
-      assert post != new_post
-      assert post.title != new_post.title
-      assert post.content == new_post.content
-    end
-
-    test "should not function match for non-post arguments" do
-      assert_raise FunctionClauseError, fn ->
-        @post_context.update_post(%{}, %{
-          "title" => "New Title",
-          "content" => "New Content"
-        })
-      end
-    end
-  end
-
-  # TODO: have property test for all combinations of 
+  # TODO: have property test for all combinations of
   # Elixir primitive types
   describe "get_post/1" do
     test "should get a post by id" do

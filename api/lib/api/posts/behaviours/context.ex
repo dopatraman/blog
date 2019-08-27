@@ -3,7 +3,6 @@ defmodule Api.Posts.ContextBehaviour do
   alias Api.User.Schema, as: UserSchema
 
   @callback insert_post(
-              author :: UserSchema.t(),
               params :: term()
             ) :: {:ok, PostSchema.t()} | {:error, atom()}
 

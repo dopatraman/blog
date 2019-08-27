@@ -73,7 +73,6 @@ defmodule ApiWeb.PostsControllerTest do
       post(
         conn,
         Routes.posts_path(Endpoint, :create, %{
-          "author_id" => author.id,
           "title" => "My New Post",
           "content" => "Hahaha",
           "is_private" => false

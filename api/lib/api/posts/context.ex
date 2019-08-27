@@ -8,7 +8,16 @@ defmodule Api.Posts.Context do
   alias Api.Posts.Schema, as: PostSchema
   alias Api.User.Schema, as: UserSchema
 
-  def insert_post(%UserSchema{} = author, params) do
+  def insert_post(%{"author_id" => author_id} = params) when is_number(author_id) do
+    UserSchema
+    |> Repo.get(author_id)
+    |> case do
+      nil -> insert_post_nil(nil)
+      user -> insert_post_for_author(user, params)
+    end
+  end
+
+  defp insert_post_for_author(%UserSchema{} = author, params) do
     %PostSchema{}
     |> Changeset.change()
     |> Changeset.put_change(:author_id, author.id)
@@ -16,11 +25,7 @@ defmodule Api.Posts.Context do
     |> Repo.insert()
   end
 
-  def update_post(%PostSchema{} = post, params) do
-    Changeset.change(post)
-    |> PostSchema.changeset(params)
-    |> Repo.update()
-  end
+  defp insert_post_nil(nil), do: {:error, :does_not_exist}
 
   def get_post(id) do
     PostSchema
@@ -31,7 +36,7 @@ defmodule Api.Posts.Context do
     UserSchema
     |> Repo.get(author_id)
     |> case do
-      nil -> {:error, :no_user}
+      nil -> {:error, :does_not_exist}
       user -> Repo.all(for_author(user))
     end
   end
