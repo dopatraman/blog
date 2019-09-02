@@ -84,4 +84,24 @@ defmodule Api.Posts.ContextTest do
       {:error, _} = @post_context.get_all_posts(1)
     end
   end
+
+  describe "get_latest_post_for_author/2" do
+    test "should get latest post for author" do
+      author = insert(:user)
+      _ = insert(:post, author: author, inserted_at: ~N[2019-08-29 20:11:42])
+      _ = insert(:post, author: author, inserted_at: ~N[2019-08-29 20:11:43])
+      post3 = insert(:post, author: author, inserted_at: ~N[2019-08-29 20:11:44])
+
+      post = @post_context.get_latest_post_for_author(author.id)
+      assert post.id == post3.id
+      assert post.author_id == post3.author_id
+    end
+
+    test "should return nil for no posts" do
+      author = insert(:user)
+
+      post = @post_context.get_latest_post_for_author(author.id)
+      assert post == nil
+    end
+  end
 end

@@ -3,6 +3,14 @@ defmodule ApiWeb.PostsController do
 
   use ApiWeb, :controller
 
+  # GET/latest
+  def latest(conn, %{"author_id" => author_id}) do
+    case @post_context.get_latest_post_for_author(author_id) do
+      nil -> put_status(conn, 500) |> json(:error)
+      post -> json(conn, post)
+    end
+  end
+
   # GET /posts
   def index(conn, %{"author_id" => author_id}) do
     posts = @post_context.get_all_posts(author_id)
@@ -19,6 +27,7 @@ defmodule ApiWeb.PostsController do
   # POST /posts
   def create(%Plug.Conn{assigns: %{current_user_id: author_id}} = conn, params) do
     {author_id, ""} = Integer.parse(author_id)
+
     params
     |> Map.put("author_id", author_id)
     |> @post_context.insert_post()
