@@ -9,3 +9,12 @@
 #
 # We recommend using the bang functions (`insert!`, `update!`
 # and so on) as they will fail if something goes wrong.
+
+alias Api.User.Schema, as: UserSchema
+
+Api.Repo.insert!(
+  UserSchema.changeset(%UserSchema{}, %{
+    email: "admin@email.com",
+    username: "admin",
+    password: "admin"
+  }))

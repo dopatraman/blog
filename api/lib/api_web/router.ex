@@ -24,7 +24,7 @@ defmodule ApiWeb.Router do
   scope "/", ApiWeb do
     pipe_through [:browser]
     resources "/", PageController, only: [:index]
-    get "/login", AuthController, :index
+    get "/login", PageController, :login
   end
 
   scope "/", ApiWeb do

@@ -1,0 +1,15 @@
+<div class="container">
+  <div class="hero">
+    <div class="title headline">Login Graphic Here</div>
+  </div>
+  <div class="main">
+    <div class="title headline">Login</div>
+    <div class="login-form">
+      <input id="username" type="text" placeholder="Username" />
+      <input type="password" placeholder="Password" />
+      <div class="button-container">
+        <div class="login-button inactive">Login</div>
+      </div>
+    </div>
+  </div>
+</div>

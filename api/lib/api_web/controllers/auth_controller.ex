@@ -5,8 +5,6 @@ defmodule ApiWeb.AuthController do
 
   alias Api.Auth.Guardian
 
-  def index(_conn, _params), do: :ok
-
   def login(conn, %{"user" => %{"username" => username, "password" => password}}) do
     @auth_service.login(username, password)
     |> login_reply(conn)
