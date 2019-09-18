@@ -1,8 +1,12 @@
 defmodule ApiWeb.Router do
   use ApiWeb, :router
 
-  pipeline :from_verification do
-    plug Api.Auth.FromVerificationPipeline
+  pipeline :verify_auth_header do
+    plug Api.Auth.VerifyAuthHeaderPipeline
+  end
+
+  pipeline :verify_auth_cookie do
+    plug Api.Auth.VerifyAuthCookiePipeline
   end
 
   pipeline :protected do
@@ -28,13 +32,18 @@ defmodule ApiWeb.Router do
   end
 
   scope "/", ApiWeb do
+    pipe_through [:browser, :verify_auth_cookie, :protected]
+    get "/create", PageController, :create_post
+  end
+
+  scope "/", ApiWeb do
     pipe_through [:api]
     post "/login", AuthController, :login
     post "/logout", AuthController, :logout
   end
 
   scope "/posts", ApiWeb do
-    pipe_through [:api, :from_verification, :protected]
+    pipe_through [:api, :verify_auth_header, :protected]
     resources "/", PostsController, only: [:create]
   end
 

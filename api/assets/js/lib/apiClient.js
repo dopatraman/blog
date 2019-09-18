@@ -16,6 +16,33 @@ export default function ApiClient() {
           password: password
         }
       })
-    }).then((res) => res.headers.get("authorization"));
+    }).then((res) => {
+      const header = res.headers.get("authorization");
+      const tokens = header.split("Bearer ");
+      if (tokens.length === 2) {
+        localStorage.setItem("header", header);
+        document.cookie = "guardian_default_token=" + tokens[1];
+        location.assign("/create");
+      }
+    });
+  }
+
+  this.createPost = function(title, content) {
+    const header = localStorage.getItem("header");
+    if (header === null) {
+      return console.log("Sorry, couldn't create your post.");
+    }
+    return fetch("/posts", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        "Authorization": header
+      },
+      body: JSON.stringify({
+        title: title,
+        content: content,
+        is_private: false
+      })
+    }).then(console.log);
   }
 }

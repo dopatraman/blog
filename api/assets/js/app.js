@@ -10,9 +10,7 @@ import css from "../css/app.css"
 // Import dependencies
 //
 import "phoenix_html"
-import ApiClient from "./lib/apiClient"
-
-window.apiClient = new ApiClient();
+import "./lib/ui";
 
 // Import local files
 //
