@@ -1,30 +1,35 @@
 .sidebar {
   display: flex;
   flex-direction: column;
+  padding-top: 6.3em;
+  width: 28%;
 }
 
 .sidebar .post {
-  padding: 0 0;
-}
-
-.divider {
-  height: 100%;
-  width: 1em;
-  background-color: #333;
+  font-size: 1.2em;
+  letter-spacing: 1px;
+  padding: .5em 3em;
+  text-align: center;
+  color: #666;
 }
 
 .editor-container {
   display: flex;
   flex-direction: row;
+  width: 45%;
 }
 
 .editor {
   display: flex;
   flex-direction: column;
+  padding-left: 3em;
+  padding-top: 6em;
+  width:100%;
 }
 
 input.title {
   border: none;
+  border-bottom: 2px solid transparent;
   outline: none;
   font-size: 3em;
   color: #333;
@@ -35,11 +40,33 @@ textarea.content {
   outline: none;
   font-size: 1em;
   color: #333;
+  height:100%;
+  resize: none;
+  padding: 0;
 }
 
 .editor-panel {
+  width: 27%;
+  height: 100%;
+  padding-top: 17em;
+  padding-left: 3em;
+}
+
+.button-container-vertical {
   display:flex;
   flex-direction: column;
-  width: 20%;
-  height: 100%;
+}
+
+.editor-panel .button {
+  width: 18em;
+}
+
+.editor-panel .button.create {
+  background-color: #ff434a;
+  border: none;
+}
+
+.editor-panel .button.trash {
+  background-color: #333;
+  border: none;
 }
