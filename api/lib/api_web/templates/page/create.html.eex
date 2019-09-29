@@ -9,7 +9,7 @@
     <div class="editor-panel">
       <div class="button-container-vertical">
         <div id="create-post" class="button create">Create</div>
-        <div class="button">Draft</div>
+        <div class="button draft">Draft</div>
         <div class="button trash">Cancel</div>
       </div>
     </div>

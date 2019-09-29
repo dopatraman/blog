@@ -17,4 +17,5 @@ Api.Repo.insert!(
     email: "admin@email.com",
     username: "admin",
     password: "admin"
-  }))
+  })
+)

@@ -85,29 +85,4 @@ defmodule ApiWeb.PostsControllerTest do
     assert resp["content"] == "Hahaha"
     assert !resp["is_private"]
   end
-
-  @tag needs_auth: false
-  test "/GET latest post", %{conn: conn, author: author} do
-    post3 = insert(:post, author: author, inserted_at: ~N[2019-08-29 20:11:44])
-
-    resp =
-      get(
-        conn,
-        Routes.posts_path(Endpoint, :latest, author.id)
-      )
-      |> json_response(200)
-
-    assert resp["author_id"] == post3.author_id
-  end
-
-  @tag needs_auth: false
-  test "/GET latest post should return an error", %{conn: conn} do
-    new_author = insert(:user)
-
-    get(
-      conn,
-      Routes.posts_path(Endpoint, :latest, new_author.id)
-    )
-    |> json_response(500)
-  end
 end

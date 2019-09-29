@@ -47,10 +47,14 @@ defmodule ApiWeb.Router do
     resources "/", PostsController, only: [:create]
   end
 
-  scope "/users/:author_id" do
-    scope "/posts", ApiWeb do
+  scope "/users/:author_id", ApiWeb do
+    pipe_through [:browser]
+    get "/latest", PageController, :latest
+  end
+
+  scope "/users/:author_id", ApiWeb do
+    scope "/posts" do
       pipe_through [:api]
-      get "/latest", PostsController, :latest
       resources "/", PostsController, only: [:index, :show]
     end
   end

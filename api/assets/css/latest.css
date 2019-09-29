@@ -1,0 +1,17 @@
+.post-container {
+  margin-left: auto;
+  margin-right: auto;
+  width: 700px;
+  color: #333;
+}
+
+.post-container .post {
+  padding-top: 5em;
+}
+
+.post-container .post h1 {
+  font-size: 3em;
+}
+.post-container .post p {
+  padding-top: 1em;
+}

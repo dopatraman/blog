@@ -62,11 +62,19 @@ textarea.content {
 }
 
 .editor-panel .button.create {
-  background-color: #ff434a;
+  background-color: #FF8F8F;
+  color: #D95A5A;
+  border: none;
+}
+
+.editor-panel .button.draft {
+  background-color: #FFC28F;
+  color: #D9945A;
   border: none;
 }
 
 .editor-panel .button.trash {
-  background-color: #333;
+  background-color: #CD7385;
+  color: #AE4882;
   border: none;
 }
