@@ -1,0 +1,44 @@
+#!/usr/bin/env bash
+
+set -e
+echo "Starting release process..."
+cd /opt/build
+
+APP_NAME="$(grep 'app:' mix.exs | sed -e 's/\[//g' -e 's/ //g' -e 's/app://' -e 's/[:,]//g')"
+APP_VSN="$(grep 'version:' mix.exs | cut -d '"' -f2)"
+
+echo "App name: $APP_NAME"
+echo "App version: $APP_VSN"
+
+echo "Creating release artifact directory..."
+mkdir -p /opt/build/rel/artifacts
+
+# Install updated versions of hex/rebar
+echo "Installing rebar and hex..."
+mix local.rebar --force
+mix local.hex --if-missing --force
+
+echo "Writing phx environment variables..."
+export MIX_ENV=prod
+echo "Make sure you set your app key and database url env variables!"
+
+
+# Fetch deps and compile
+echo "Fetching project dependencies..."
+mix deps.get
+# Run an explicit clean to remove any build artifacts from the host
+echo "Cleaning and compiling..."
+mix clean
+mix deps.compile bcrypt_elixir
+mix compile --force
+mix phx.digest
+# Build the release
+echo "Generating release..."
+mix release
+
+# # Copy tarball to output
+# ls -al /opt/build/_build
+tar -zcf "/opt/build/rel/artifacts/$APP_NAME-$APP_VSN.tar.gz" /opt/build/_build/prod
+# cp "/opt/build/_build/prod/rel/$APP_NAME/releases/$APP_VSN/$APP_NAME.tar.gz" /opt/build/rel/artifacts/"$APP_NAME-$APP_VSN.tar.gz"
+echo "Release generated at rel/artifacts/$APP_NAME-$APP_VSN.tar.gz"
+exit 0
