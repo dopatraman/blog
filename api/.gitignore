@@ -39,3 +39,5 @@ rel/
 # Rebar and hex install dirs (needed for release generation)
 .hex/
 .mix
+
+local/
