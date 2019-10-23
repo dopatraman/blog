@@ -1,0 +1,53 @@
+---
+- name: check to see if release archive exists locally
+  stat:
+    path: "{{ release_archive_path }}"
+  register: release_st
+  delegate_to: 127.0.0.1
+
+- name: fail if no local release
+  fail:
+    msg: "Local release tarball not found. Copy it to {{ release_archive_path }}."
+  when: not release_st.stat.exists
+
+- name: clean remote release directory
+  file:
+    path: "{{remote_release_dir}}"
+    state: absent
+
+- name: create remote release directory
+  file:
+    path: "{{remote_release_dir}}"
+    state: directory
+
+- name: copy local release archive to remote server
+  copy:
+    src: "{{release_archive_path}}"
+    dest: "{{remote_release_dir}}"
+
+- name: check to see if release exists
+  stat:
+    path: "{{remote_release_dir}}{{release_name}}.tar.gz"
+  register: post_copy_st
+
+- name: fail if not copied over
+  fail:
+    msg: "Copy didn't work. No release at {{ remote_release_dir }}."
+  when: not post_copy_st.stat.exists
+
+- name: untar project
+  command: "tar -zxvf {{remote_release_archive_path}} -C {{remote_release_dir}}"
+
+- name: check to see if release artifact exists remotely
+  stat:
+    path: "{{remote_release_artifact_path}}"
+  register: remote_release_artifact_st
+
+- name: start remote server
+  command: "{{remote_release_artifact_path}} daemon"
+  when: remote_release_artifact_st.stat.exists
+  register: foo
+
+- name: echo end
+  debug:
+    var: foo

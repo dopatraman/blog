@@ -1,0 +1,15 @@
+---
+# Credential vars are from project-facts.yml
+
+- when: "database_name is not defined"
+  name: "compute database name"
+  set_fact:
+    database_name: "{{app_name}}_prod"
+
+- name: create or get postgres password
+  set_fact:
+    database_password: "{{ lookup('password', credentials_dir + '/postgres') }}"
+
+- name: set database user
+  set_fact:
+    database_user: apiadmin
