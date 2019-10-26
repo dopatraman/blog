@@ -4,16 +4,11 @@
     path: "{{remote_release_artifact_path}}"
   register: remote_release_artifact_st
 
-- name: stop remote server
-  command: "{{remote_release_artifact_path}} stop"
+- name: start remote server
+  command: "{{remote_release_artifact_path}} daemon"
   when: remote_release_artifact_st.stat.exists
-  register: stop_cmd
-
-- name: clean remote release directory
-  file:
-    path: "{{remote_release_dir}}"
-    state: absent
+  register: foo
 
 - name: echo end
   debug:
-    var: stop_cmd
+    var: foo

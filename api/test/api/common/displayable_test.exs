@@ -12,6 +12,7 @@ defmodule Api.Common.DisplayableTest do
       title: "My\nTitle",
       content: "My\nContent"
     }
+
     new_post = HTMLDisplayable.from(post)
     assert new_post.title == post.title
     assert new_post.content == "My<br />Content"

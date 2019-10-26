@@ -1,11 +1,13 @@
 defmodule ReleaseTasks do
   def migrate do
     {:ok, _} = Application.ensure_all_started(:api)
+
     Ecto.Migrator.run(
       Api.Repo,
       path("priv/repo/migrations"),
       :up,
-      all: true)
+      all: true
+    )
 
     # Seed db
     seed_database()

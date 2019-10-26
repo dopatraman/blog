@@ -1,14 +1,20 @@
 FROM ubuntu:16.04
 
 ARG secret
-ARG dburl
+ARG dbuser
+ARG dbpassword
+ARG dbname
+ARG dbhost
 
 ENV REFRESHED_AT=2018-08-16 \
     LANG=en_US.UTF-8 \
     HOME=/opt/build \
     TERM=xterm \
     SECRET_KEY_BASE=$secret \
-    DATABASE_URL=$dburl
+    DATABASE_USER=$dbuser \
+    DATABASE_PASSWORD=$dbpassword \
+    DATABASE_NAME=$dbname \
+    DATABASE_HOST=$dbhost
 
 WORKDIR /opt/build
 

@@ -9,7 +9,7 @@
 
 - name: set credentials directory path
   set_fact:
-    credentials_dir: "~/credentials"
+    credentials_dir: "~/credentials/"
 
 - name: set release name
   set_fact:
