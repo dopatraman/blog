@@ -6,9 +6,9 @@
     <div class="title headline">Login</div>
     <div class="login-form">
       <input id="username" class="login-input" type="text" placeholder="Username" />
-      <input class="login-input" type="password" placeholder="Password" />
+      <input id="password" class="login-input" type="password" placeholder="Password" />
       <div class="button-container">
-        <div class="login-button inactive">Login</div>
+        <div id="login" class="login-button active">Login</div>
       </div>
     </div>
   </div>
