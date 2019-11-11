@@ -5,6 +5,7 @@ ARG dbuser
 ARG dbpassword
 ARG dbname
 ARG dbhost
+ARG port
 
 ENV REFRESHED_AT=2018-08-16 \
     LANG=en_US.UTF-8 \
@@ -14,7 +15,8 @@ ENV REFRESHED_AT=2018-08-16 \
     DATABASE_USER=$dbuser \
     DATABASE_PASSWORD=$dbpassword \
     DATABASE_NAME=$dbname \
-    DATABASE_HOST=$dbhost
+    DATABASE_HOST=$dbhost \
+    PORT=$port
 
 WORKDIR /opt/build
 
