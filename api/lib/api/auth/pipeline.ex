@@ -1,42 +1,33 @@
-defmodule Api.Auth.CurrentUser do
-  import Plug.Conn
-  import Guardian.Plug
-  def init(opts), do: opts
+defmodule Api.Auth.VerifySessionIdPipeline do
+  import Plug.Conn, only: [get_req_header: 2, halt: 1, assign: 3]
+  import Plug.Conn.Cookies, only: [decode: 1]
+  alias Api.Auth.Service, as: AuthService
+  alias Api.User.Schema, as: UserSchema
 
-  def call(conn, _opts) do
-    %{"sub" => user_id} = current_claims(conn)
-    assign(conn, :current_user_id, user_id)
-  end
-end
-
-defmodule InspectPlug do
-  import Plug.Conn
   def init(opts), do: opts
 
   def call(conn, _) do
-    IO.inspect(conn)
+    get_req_header(conn, "cookie")
+    |> get_session_key()
+    |> grant_access()
+    |> respond(conn)
   end
-end
 
-defmodule Api.Auth.VerifyAuthHeaderPipeline do
-  use Guardian.Plug.Pipeline,
-    otp_app: :api,
-    error_handler: Api.Auth.ErrorHandler,
-    module: Api.Auth.Guardian
+  defp get_session_key([]), do: {:error, :no_request_cookie}
 
-  plug Guardian.Plug.VerifySession, claims: %{"typ" => "access"}
-  plug Guardian.Plug.VerifyHeader, realm: "Bearer"
-  plug Guardian.Plug.LoadResource
-  plug Api.Auth.CurrentUser
-end
+  defp get_session_key([cookie]) do
+    case decode(cookie) do
+      %{"id" => session_key} -> {:ok, session_key}
+      _ -> {:error, :invalid_request_cookie}
+    end
+  end
 
-defmodule Api.Auth.VerifyAuthCookiePipeline do
-  use Guardian.Plug.Pipeline,
-    otp_app: :api,
-    error_handler: Api.Auth.ErrorHandler,
-    module: Api.Auth.Guardian
+  defp grant_access({:error, _} = error), do: error
 
-  plug Guardian.Plug.VerifyCookie, exchange_from: "access"
-  plug Guardian.Plug.LoadResource
-  plug Api.Auth.CurrentUser
+  defp grant_access({:ok, session_key}), do: AuthService.attempt_access_grant(session_key)
+
+  defp respond({:error, reason}, conn),
+    do: Api.Auth.ErrorHandler.auth_error(conn, reason) |> halt()
+
+  defp respond(%UserSchema{} = user, conn), do: assign(conn, :current_user, user)
 end

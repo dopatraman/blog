@@ -1,8 +1,11 @@
 defmodule ApiWeb.AuthControllerTest do
   alias ApiWeb.Router.Helpers, as: Routes
   alias ApiWeb.Endpoint
+  alias Plug.Conn.Cookies
+  alias Ecto.UUID
+
   import Api.Factory
-  import Plug.Conn, only: [get_resp_header: 2]
+  import Plug.Conn, only: [get_resp_header: 2, fetch_cookies: 2]
   use ApiWeb.ConnCase
 
   test "get login token successfully", %{conn: conn} do
@@ -13,7 +16,9 @@ defmodule ApiWeb.AuthControllerTest do
       conn
       |> put_req_header("content-type", "application/json")
       |> post(
-        Routes.auth_path(Endpoint, :login,
+        Routes.auth_path(
+          Endpoint,
+          :login,
           user: %{
             "username" => user.username,
             "password" => raw_password
@@ -21,11 +26,14 @@ defmodule ApiWeb.AuthControllerTest do
         )
       )
 
-    [token] = get_resp_header(resp, "authorization")
+    [cookie] = get_resp_header(resp, "set-cookie")
+    [redirect_path] = get_resp_header(resp, "location")
+    assert cookie !== nil
+    %{"id" => uuid} = Cookies.decode(cookie)
+    {:ok, _} = UUID.cast(uuid)
 
-    assert token !== nil
-
-    json_response(resp, 200)
+    assert resp.status == 302
+    assert redirect_path == "/create"
   end
 
   test "bad login", %{conn: conn} do
@@ -33,17 +41,23 @@ defmodule ApiWeb.AuthControllerTest do
     raw_password = "password"
     user = insert(:user, password: Bcrypt.hash_pwd_salt(raw_password))
 
-    _resp =
+    resp =
       conn
       |> put_req_header("content-type", "application/json")
       |> post(
-        Routes.auth_path(Endpoint, :login,
+        Routes.auth_path(
+          Endpoint,
+          :login,
           user: %{
             "username" => user.username,
             "password" => bad_raw_password
           }
         )
       )
-      |> json_response(401)
+
+    [] = get_resp_header(resp, "set-cookie")
+    [redirect_path] = get_resp_header(resp, "location")
+    assert resp.status == 500
+    assert redirect_path == "/login"
   end
 end

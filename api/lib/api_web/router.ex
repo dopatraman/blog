@@ -1,16 +1,8 @@
 defmodule ApiWeb.Router do
   use ApiWeb, :router
 
-  pipeline :verify_auth_header do
-    plug Api.Auth.VerifyAuthHeaderPipeline
-  end
-
-  pipeline :verify_auth_cookie do
-    plug Api.Auth.VerifyAuthCookiePipeline
-  end
-
-  pipeline :protected do
-    plug Guardian.Plug.EnsureAuthenticated
+  pipeline :verify_session do
+    plug Api.Auth.VerifySessionIdPipeline
   end
 
   pipeline :browser do
@@ -32,8 +24,13 @@ defmodule ApiWeb.Router do
   end
 
   scope "/", ApiWeb do
-    pipe_through [:browser, :verify_auth_cookie, :protected]
+    pipe_through [:browser, :verify_session]
     get "/create", PageController, :create_post
+  end
+
+  scope "/users/:author_id", ApiWeb do
+    pipe_through [:browser]
+    get "/latest", PageController, :latest
   end
 
   scope "/", ApiWeb do
@@ -43,13 +40,8 @@ defmodule ApiWeb.Router do
   end
 
   scope "/posts", ApiWeb do
-    pipe_through [:api, :verify_auth_header, :protected]
+    pipe_through [:api, :verify_session]
     resources "/", PostsController, only: [:create]
-  end
-
-  scope "/users/:author_id", ApiWeb do
-    pipe_through [:browser]
-    get "/latest", PageController, :latest
   end
 
   scope "/users/:author_id", ApiWeb do

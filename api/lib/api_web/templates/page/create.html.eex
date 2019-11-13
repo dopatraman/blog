@@ -1,17 +1,17 @@
 <div class="container">
   <div class="sidebar">
   </div>
-  <div class="editor-container">
-    <div class="editor">
-      <input id="title" type="text" class="title" placeholder="Title" autocomplete="off" />
-      <textarea id="content" class="content" placeholder="Start your post..."></textarea>
-    </div>
-    <div class="editor-panel">
-      <div class="button-container-vertical">
-        <div id="create-post" class="button create">Create</div>
-        <div class="button draft">Draft</div>
-        <div class="button trash">Cancel</div>
+  <%= form_for @conn, Routes.posts_path(@conn, :create) , fn f -> %>
+    <div class="editor-container">
+      <div class="editor">
+        <%= text_input f, :title, [id: "title", class: "title", placeholder: "Title"] %>
+        <%= textarea f, :content, [id: "content", class: "content", placeholder: "Start your post..."]  %>
+      </div>
+      <div class="editor-panel">
+        <div class="button-container-vertical">
+          <%= submit "Create", [id: "create-post", class: "button create"] %>
+        </div>
       </div>
     </div>
-  </div>
+  <% end %>
 </div>

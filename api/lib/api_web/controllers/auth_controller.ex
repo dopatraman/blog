@@ -1,28 +1,22 @@
 defmodule ApiWeb.AuthController do
   use ApiWeb, :controller
 
-  @auth_service Application.get_env(:api, :auth_service)
-
-  alias Api.Auth.Guardian
+  alias Api.Auth.Session.Schema, as: SessionSchema
+  alias Api.Auth.Service, as: AuthService
 
   def login(conn, %{"user" => %{"username" => username, "password" => password}}) do
-    @auth_service.login(username, password)
+    AuthService.login(username, password)
     |> login_reply(conn)
   end
 
-  defp login_reply({:ok, user}, conn) do
-    conn = Guardian.Plug.sign_in(conn, user)
-    token = Guardian.Plug.current_token(conn)
-    %{"exp" => exp} = Guardian.Plug.current_claims(conn)
-
+  defp login_reply({:ok, %SessionSchema{} = session}, conn) do
     conn
-    |> put_resp_header("authorization", "Bearer #{token}")
-    |> put_resp_header("x-expires", "#{exp}")
-    |> json(:ok)
+    |> put_resp_header("set-cookie", "id=#{session.key}")
+    |> redirect(to: "/create")
   end
 
   defp login_reply({:error, _}, conn) do
-    put_status(conn, 401)
-    |> json(:error)
+    put_status(conn, 500)
+    |> redirect(to: "/login")
   end
 end

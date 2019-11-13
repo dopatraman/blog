@@ -3,6 +3,7 @@ defmodule Api.Factory do
 
   alias Api.Posts.Schema, as: PostSchema
   alias Api.User.Schema, as: UserSchema
+  alias Api.Auth.Session.Schema, as: SessionSchema
 
   def post_factory do
     %PostSchema{
@@ -24,6 +25,14 @@ defmodule Api.Factory do
       username: Faker.Pokemon.name(),
       email: Faker.Internet.email(),
       password: Bcrypt.hash_pwd_salt(Faker.Lorem.word())
+    }
+  end
+
+  def session_factory do
+    %SessionSchema{
+      key: Faker.UUID.v4(),
+      user: build(:user),
+      expires_at: Faker.DateTime.forward(1)
     }
   end
 end

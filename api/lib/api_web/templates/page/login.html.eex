@@ -4,12 +4,14 @@
   </div>
   <div class="main">
     <div class="title headline">Login</div>
-    <div class="login-form">
-      <input id="username" class="login-input" type="text" placeholder="Username" />
-      <input id="password" class="login-input" type="password" placeholder="Password" />
-      <div class="button-container">
-        <div id="login" class="login-button active">Login</div>
+    <%= form_for @conn, Routes.auth_path(@conn, :login), [as: "user"] , fn f -> %>
+      <div class="login-form">
+        <%= text_input f, :user, [id: "username", name: "user[username]", class: "login-input", placeholder: "Username"] %>
+        <%= password_input f, :password, [id: "password", class: "login-input", placeholder: "Password"] %>
+        <div class="button-container">
+          <%= submit "Login", [id: "login", class: "login-button active"] %>
+        </div>
       </div>
-    </div>
+    <% end %>
   </div>
 </div>

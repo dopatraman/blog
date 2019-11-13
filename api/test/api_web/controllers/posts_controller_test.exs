@@ -5,70 +5,23 @@ defmodule ApiWeb.PostsControllerTest do
   import Plug.Conn, only: [get_resp_header: 2, put_req_header: 3]
   use ApiWeb.ConnCase
 
-  defp login(conn, user, raw_password) do
-    [token] =
-      conn
-      |> put_req_header("content-type", "application/json")
-      |> post(
-        Routes.auth_path(Endpoint, :login,
-          user: %{
-            "username" => user.username,
-            "password" => raw_password
-          }
-        )
-      )
-      |> get_resp_header("authorization")
-
-    {:ok, token}
-  end
-
-  defp add_auth_header(conn, user, raw_password) do
-    {:ok, token} = login(conn, user, raw_password)
-    put_req_header(conn, "authorization", token)
-  end
-
-  setup %{conn: conn, needs_auth: needs_auth} do
+  setup %{conn: conn} do
     raw_password = "pwnage"
     author = insert(:user, password: Bcrypt.hash_pwd_salt(raw_password))
     post = insert(:post, author: author)
-
-    conn =
-      case needs_auth do
-        true -> add_auth_header(conn, author, raw_password)
-        _ -> conn
-      end
+    session = insert(:session, user: author)
 
     %{
       conn: conn,
       author: author,
-      post: post
+      post: post,
+      session: session
     }
   end
 
-  @tag needs_auth: false
-  test "GET /posts", %{conn: conn, author: author, post: post} do
-    [resp_post] =
-      get(conn, Routes.posts_path(Endpoint, :index, author.id))
-      |> json_response(200)
+  test "POST /posts with active session", %{conn: conn, author: author, session: session} do
+    conn = put_req_header(conn, "cookie", "id=#{session.key}")
 
-    assert resp_post["author_id"] == post.author.id
-    assert resp_post["content"] == post.content
-    assert resp_post["title"] == post.title
-  end
-
-  @tag needs_auth: false
-  test "GET /posts/:id", %{conn: conn, author: author, post: post} do
-    resp_post =
-      get(conn, Routes.posts_path(Endpoint, :show, author.id, post.id))
-      |> json_response(200)
-
-    assert resp_post["author_id"] == post.author.id
-    assert resp_post["content"] == post.content
-    assert resp_post["title"] == post.title
-  end
-
-  @tag needs_auth: true
-  test "POST /posts with access controls", %{conn: conn, author: author} do
     resp =
       post(
         conn,
@@ -78,11 +31,25 @@ defmodule ApiWeb.PostsControllerTest do
           "is_private" => false
         })
       )
-      |> json_response(200)
 
-    assert resp["author_id"] == author.id
-    assert resp["title"] == "My New Post"
-    assert resp["content"] == "Hahaha"
-    assert !resp["is_private"]
+    assert resp.status == 302
+    assert resp.assigns.current_user != nil
+    assert resp.assigns.current_user == author
+
+    [_redirect_path] = get_resp_header(resp, "location")
+  end
+
+  test "POST /posts without session", %{conn: conn} do
+    resp =
+      post(
+        conn,
+        Routes.posts_path(Endpoint, :create, %{
+          "title" => "My New Post",
+          "content" => "Hahaha",
+          "is_private" => false
+        })
+      )
+
+    assert resp.status == 500
   end
 end
