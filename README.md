@@ -19,3 +19,10 @@ This has to be done _before_ the app server is started
 ## Database teardown
 1. `cd` into `api/`
 2. `$ ansible-playbook ./deploy/teardown-db.yml`
+
+## Deployment
+1. Setup 1-3
+2. Teardown
+3. Setup 4-6
+
+**Make sure local environment variables are set properly**
