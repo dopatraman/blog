@@ -9,6 +9,7 @@ defmodule Api.Auth.Context do
 
   def insert_session(%UserSchema{} = user) do
     expiration = DateTime.from_unix!(DateTime.to_unix(DateTime.utc_now(), :second) + 300)
+
     %SessionSchema{}
     |> Changeset.change()
     |> Changeset.put_change(:user_id, user.id)

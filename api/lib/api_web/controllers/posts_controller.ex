@@ -11,7 +11,7 @@ defmodule ApiWeb.PostsController do
     |> Map.put("author_id", author.id)
     |> @post_context.insert_post()
     |> case do
-      {:ok, _post} -> redirect(conn, to: Routes.page_path(Endpoint, :latest, author.id))
+      {:ok, _post} -> redirect(conn, to: Routes.page_path(Endpoint, :latest, author.username))
       {:error, _} -> put_status(conn, 500) |> redirect(to: "/create")
     end
   end

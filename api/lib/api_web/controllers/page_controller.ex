@@ -15,8 +15,8 @@ defmodule ApiWeb.PageController do
   end
 
   # GET/latest
-  def latest(conn, %{"author_id" => author_id}) do
-    case @post_context.get_latest_post_for_author(author_id) do
+  def latest(conn, %{"username" => username}) do
+    case @post_context.get_latest_post_for_author(username) do
       nil -> put_status(conn, 500) |> json(:error)
       post -> render_post(conn, "latest.html", post)
     end

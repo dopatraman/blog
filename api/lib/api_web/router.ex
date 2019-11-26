@@ -28,7 +28,7 @@ defmodule ApiWeb.Router do
     get "/create", PageController, :create_post
   end
 
-  scope "/users/:author_id", ApiWeb do
+  scope "/users/:username", ApiWeb do
     pipe_through [:browser]
     get "/latest", PageController, :latest
   end

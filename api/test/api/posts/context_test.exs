@@ -92,7 +92,7 @@ defmodule Api.Posts.ContextTest do
       _ = insert(:post, author: author, inserted_at: ~N[2019-08-29 20:11:43])
       post3 = insert(:post, author: author, inserted_at: ~N[2019-08-29 20:11:44])
 
-      post = @post_context.get_latest_post_for_author(author.id)
+      post = @post_context.get_latest_post_for_author(author.username)
       assert post.id == post3.id
       assert post.author_id == post3.author_id
     end
@@ -100,7 +100,7 @@ defmodule Api.Posts.ContextTest do
     test "should return nil for no posts" do
       author = insert(:user)
 
-      post = @post_context.get_latest_post_for_author(author.id)
+      post = @post_context.get_latest_post_for_author(author.username)
       assert post == nil
     end
   end
