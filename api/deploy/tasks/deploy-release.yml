@@ -20,23 +20,10 @@
     path: "{{remote_release_dir}}"
     state: directory
 
-- name: copy local release archive to remote server
-  copy:
+- name: unarchive release on remote server
+  unarchive:
     src: "{{release_archive_path}}"
     dest: "{{remote_release_dir}}"
-
-- name: check to see if release exists
-  stat:
-    path: "{{remote_release_dir}}{{release_name}}.tar.gz"
-  register: post_copy_st
-
-- name: fail if not copied over
-  fail:
-    msg: "Copy didn't work. No release at {{ remote_release_dir }}."
-  when: not post_copy_st.stat.exists
-
-- name: untar project
-  command: "tar -zxvf {{remote_release_archive_path}} -C {{remote_release_dir}}"
 
 - name: check to see if release artifact exists remotely
   stat:
