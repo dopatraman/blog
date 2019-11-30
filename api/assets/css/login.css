@@ -66,25 +66,3 @@ input[type="text"].login-input:focus::placeholder, input[type="password"]:focus:
   flex-direction: row;
   justify-content: flex-end;
 }
-
-.login-button {
-  width: 83px;
-  padding: .1em 1em;
-}
-
-.login-button.active {
-  color: #333;
-  border: 2px solid #333;
-  border-radius: 3px;
-  border: 2px solid #333;
-  box-shadow: 0px 1px 2px #AAA;
-  cursor: pointer;
-}
-
-.login-button.inactive {
-  color: #BBB;
-  background-color: #EEE;
-  border: 2px solid #EEE;
-  border-radius: 3px;
-  box-shadow: 0px 1px 2px #CCC;
-}
