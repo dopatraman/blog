@@ -1,5 +1,8 @@
 defprotocol Api.Posts.Tokenizer.Token do
   @type t() :: any()
+
+  @spec text(Token.t()) :: String.t()
+  def text(token)
 end
 
 defmodule Api.Posts.Tokenizer.Token.BackTick do
@@ -7,6 +10,7 @@ defmodule Api.Posts.Tokenizer.Token.BackTick do
   defstruct []
 
   defimpl Api.Posts.Tokenizer.Token do
+    def text(_), do: "`"
   end
 end
 
@@ -15,6 +19,7 @@ defmodule Api.Posts.Tokenizer.Token.BlockQuoteCaret do
   defstruct []
 
   defimpl Api.Posts.Tokenizer.Token do
+    def text(_), do: ">"
   end
 end
 
@@ -23,6 +28,7 @@ defmodule Api.Posts.Tokenizer.Token.Bullet do
   defstruct []
 
   defimpl Api.Posts.Tokenizer.Token do
+    def text(_), do: "*"
   end
 end
 
@@ -31,6 +37,7 @@ defmodule Api.Posts.Tokenizer.Token.Header do
   defstruct []
 
   defimpl Api.Posts.Tokenizer.Token do
+    def text(_), do: "#"
   end
 end
 
@@ -41,6 +48,7 @@ defmodule Api.Posts.Tokenizer.Token.Ordinal do
   defstruct identifier: nil
 
   defimpl Api.Posts.Tokenizer.Token do
+    def text(token), do: token.identifier
   end
 end
 
@@ -49,6 +57,7 @@ defmodule Api.Posts.Tokenizer.Token.Dot do
   defstruct []
 
   defimpl Api.Posts.Tokenizer.Token do
+    def text(_), do: "."
   end
 end
 
@@ -59,5 +68,6 @@ defmodule Api.Posts.Tokenizer.Token.TextNode do
   defstruct text: nil
 
   defimpl Api.Posts.Tokenizer.Token do
+    def text(token), do: token.text
   end
 end
