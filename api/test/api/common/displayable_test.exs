@@ -4,6 +4,7 @@ defmodule Api.Common.DisplayableTest do
   alias Api.Posts.Schema, as: PostSchema
   alias Api.Posts.Parser.RootNode
   alias Api.Posts.Parser.HeaderNode
+  alias Api.Posts.Parser.ParagraphNode
   alias Api.Posts.Parser.TextBlock
 
   test "should convert newline chars to br elements" do
@@ -39,14 +40,14 @@ defmodule Api.Common.DisplayableTest do
     root = %RootNode{
       left: %HeaderNode{level: 2, body: %TextBlock{text: "level 2"}},
       right: %RootNode{
-        left: %TextBlock{text: "body"},
+        left: %ParagraphNode{left: %TextBlock{text: "body"}, right: %RootNode{}},
         right: %RootNode{
           left: %HeaderNode{level: 3, body: %TextBlock{text: "level 3"}},
-          right: %TextBlock{text: "body 3"}
+          right: %ParagraphNode{left: %TextBlock{text: "body 3"}, right: %RootNode{}}
         }
       }
     }
 
-    assert HTMLDisplayable.from(root) != nil
+    assert HTMLDisplayable.from(root) == "<div class=\"header-2\">level 2</div><div class=\"paragraph\">body</div><div class=\"header-3\">level 3</div><div class=\"paragraph\">body 3</div>"
   end
 end
