@@ -4,7 +4,6 @@ defmodule Api.Posts.Tokenizer do
     BlockQuoteCaret,
     Bullet,
     Header,
-    Dot,
     TextNode
   }
 
@@ -43,7 +42,6 @@ defmodule Api.Posts.Tokenizer do
       ?# -> {%Header{}, rest, fragments}
       ?> -> {%BlockQuoteCaret{}, rest, fragments}
       ?` -> {%BackTick{}, rest, fragments}
-      ?. -> {%Dot{}, rest, fragments}
       x when x in [?-, ?*] -> {%Bullet{}, rest, fragments}
       _ = cp -> {nil, rest, fragments <> <<cp>>}
     end
