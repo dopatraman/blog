@@ -11,6 +11,7 @@ defmodule Api.Posts.Parser.Line do
   alias Api.Posts.Parser.Line.InitializedState
 
   def init(token), do: %InitializedState{token: token}
+
   def parse(%InitializedState{token: initial_token}, tokens) do
     :wip
   end

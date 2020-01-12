@@ -5,11 +5,9 @@ defmodule Api.Posts.Tokenizer.TokenizerTest do
 
   alias Api.Posts.Tokenizer.Token.{
     BackTick,
-    Blank,
     BlockQuoteCaret,
     Bullet,
     Header,
-    Ordinal,
     Dot,
     TextNode
   }

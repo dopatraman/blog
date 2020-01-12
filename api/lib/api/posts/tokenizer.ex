@@ -4,21 +4,21 @@ defmodule Api.Posts.Tokenizer do
     BlockQuoteCaret,
     Bullet,
     Header,
-    Ordinal,
     Dot,
     TextNode
   }
 
   alias Api.Posts.Schema, as: PostSchema
 
+  @spec tokenize(PostSchema.t()) :: [Token.t()]
   def tokenize(%PostSchema{content: content}), do: tokenize(content)
 
+  @spec tokenize(String.t()) :: [Token.t()]
   def tokenize(content) when is_binary(content) do
     lines(content)
     |> Enum.map(fn line -> scan(line) end)
   end
 
-  # [%LineStruct]? LineString protocol?
   @spec lines(String.t()) :: [[Token.t()]]
   def lines(content) when is_binary(content), do: String.split(content, "\n", trim: true)
 

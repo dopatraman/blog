@@ -1,3 +1,4 @@
+# This protocol is not being used. Delete.
 defprotocol Api.Posts.Parser.ASTNode do
   @type t() :: %{
           left: Api.Posts.Parser.ASTNode.t(),
@@ -26,7 +27,18 @@ defmodule Api.Posts.Parser.HeaderNode do
 end
 
 defmodule Api.Posts.Parser.BlockQuoteNode do
+end
 
+defmodule Api.Posts.Parser.ParagraphNode do
+  @type t() :: %{
+          left: TextBlock.t(),
+          right: ASTNode.t()
+        }
+  defstruct left: nil,
+            right: nil
+
+  defimpl Api.Posts.Parser.ASTNode do
+  end
 end
 
 defmodule Api.Posts.Parser.TextBlock do
