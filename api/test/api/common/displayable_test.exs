@@ -21,7 +21,7 @@ defmodule Api.Common.DisplayableTest do
     assert new_post.title == post.title
 
     assert new_post.content ==
-             "<div class=\"paragraph\">My</div><div class=\"paragraph\">Content</div>"
+      "<div class=\"post-content\"><div class=\"paragraph\">My</div><div class=\"paragraph\">Content</div></div>"
   end
 
   test "should render a text block" do

@@ -19,7 +19,7 @@ defimpl HTMLDisplayable, for: Api.Posts.Schema do
       |> Parser.parse_content()
       |> HTMLDisplayable.from()
 
-    %Api.Posts.Schema{post | content: content}
+    %Api.Posts.Schema{post | content: "<div class=\"post-content\">" <> content <> "</div>"}
   end
 end
 
