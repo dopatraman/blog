@@ -34,8 +34,6 @@ defmodule Api.Common.DisplayableTest do
     assert HTMLDisplayable.from(header) == "<div class=\"header-4\">hello</div>"
   end
 
-  # This test will refer orphaned text nodes, and so the assertions are
-  # incomplete. This test should be revisited once Paragraph parsing is complete.
   test "should render a root node" do
     root = %RootNode{
       left: %HeaderNode{level: 2, body: %TextBlock{text: "level 2"}},
