@@ -8,7 +8,6 @@ defmodule Api.Posts.Tokenizer.TokenizerTest do
     BlockQuoteCaret,
     Bullet,
     Header,
-    Dot,
     TextNode
   }
 
@@ -37,10 +36,6 @@ defmodule Api.Posts.Tokenizer.TokenizerTest do
     {nil, "", "lorem ipsum"} = Tokenizer.token("m", "lorem ipsu")
   end
 
-  test "should return a Dot token" do
-    {%Dot{}, "1", ""} = Tokenizer.token(".1", "")
-  end
-
   test "should return a text node" do
     [%TextNode{text: "Hello "}, _] = Tokenizer.scan("Hello #")
   end
@@ -61,9 +56,5 @@ defmodule Api.Posts.Tokenizer.TokenizerTest do
   test "should return a backtick and text node" do
     [%BackTick{}, %TextNode{text: "code"}] = Tokenizer.scan("`code")
     [%BackTick{}, %TextNode{text: "code"}, %BackTick{}] = Tokenizer.scan("`code`")
-  end
-
-  test "should return a Dot and Text" do
-    [%Dot{}, %TextNode{text: "1"}] = Tokenizer.scan(".1")
   end
 end
