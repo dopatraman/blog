@@ -2,17 +2,11 @@ defmodule ApiWeb.PageController do
   @post_context Application.get_env(:api, :post_context)
   use ApiWeb, :controller
 
-  def login(conn, _) do
-    render(conn, "login.html")
-  end
+  def login(conn, _), do: render(conn, "login.html")
 
-  def create_post(conn, _) do
-    render(conn, "create.html")
-  end
+  def create_post(conn, _), do: render(conn, "create.html")
 
-  def index(conn, _params) do
-    render(conn, "index.html")
-  end
+  def index(conn, _params), do: redirect(conn, to: "/login")
 
   # GET/latest
   def latest(conn, %{"username" => username}) do
