@@ -9,14 +9,11 @@ defmodule ReleaseTasks do
       all: true
     )
 
-    # Seed db
-    seed_database()
-
     # Close process
     :init.stop()
   end
 
-  defp seed_database() do
+  def seed_database() do
     Code.require_file(path("priv/repo/seeds.exs"))
   end
 

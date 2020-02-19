@@ -16,3 +16,6 @@
   
   - name: create database
     include: tasks/postgres.yml
+
+  - name: seed database
+    include: tasks/seed-db.yml
