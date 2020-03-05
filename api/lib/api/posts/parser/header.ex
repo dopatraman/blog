@@ -34,7 +34,6 @@ defmodule Api.Posts.Parser.Header do
   def parse(%LevelCountingState{level: n}, tokens),
     do: parse(%ContentAcceptingState{level: n}, tokens)
 
-  # This won't work until a text function is implemented for the Token protocol
   def parse(%ContentAcceptingState{level: n}, tokens),
     do: %HeaderNode{
       level: n,

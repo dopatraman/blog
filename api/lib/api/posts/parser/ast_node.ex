@@ -26,6 +26,18 @@ defmodule Api.Posts.Parser.HeaderNode do
   end
 end
 
+defmodule Api.Posts.Parser.CodeBlockNode do
+  @type t() :: %{
+          language: String.t(),
+          content: list(String.t())
+        }
+  defstruct language: nil,
+            content: []
+
+  defimpl Api.Posts.Parser.ASTNode do
+  end
+end
+
 defmodule Api.Posts.Parser.BlockQuoteNode do
 end
 

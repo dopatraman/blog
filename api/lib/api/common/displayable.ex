@@ -54,6 +54,21 @@ defimpl HTMLDisplayable, for: Api.Posts.Parser.HeaderNode do
   end
 end
 
+defimpl HTMLDisplayable, for: Api.Posts.Parser.CodeBlockNode do
+  alias Api.Posts.Parser.CodeBlockNode
+
+  def from(%CodeBlockNode{
+        language: language,
+        content: content
+      }) do
+    "<pre>" <>
+      "<code class=\"language-#{language}\">" <>
+      Enum.join(content, "\n") <>
+      "</code>" <>
+      "</pre>"
+  end
+end
+
 defimpl HTMLDisplayable, for: Api.Posts.Parser.ParagraphNode do
   alias Api.Posts.Parser.ParagraphNode
 

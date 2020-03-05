@@ -4,6 +4,7 @@ defmodule Api.Common.DisplayableTest do
   alias Api.Posts.Schema, as: PostSchema
   alias Api.Posts.Parser.RootNode
   alias Api.Posts.Parser.HeaderNode
+  alias Api.Posts.Parser.CodeBlockNode
   alias Api.Posts.Parser.ParagraphNode
   alias Api.Posts.Parser.TextBlock
 
@@ -21,7 +22,7 @@ defmodule Api.Common.DisplayableTest do
     assert new_post.title == post.title
 
     assert new_post.content ==
-      "<div class=\"post-content\"><div class=\"paragraph\">My</div><div class=\"paragraph\">Content</div></div>"
+             "<div class=\"post-content\"><div class=\"paragraph\">My</div><div class=\"paragraph\">Content</div></div>"
   end
 
   test "should render a text block" do
@@ -46,6 +47,12 @@ defmodule Api.Common.DisplayableTest do
       }
     }
 
-    assert HTMLDisplayable.from(root) == "<div class=\"header-2\">level 2</div><div class=\"paragraph\">body</div><div class=\"header-3\">level 3</div><div class=\"paragraph\">body 3</div>"
+    assert HTMLDisplayable.from(root) ==
+             "<div class=\"header-2\">level 2</div><div class=\"paragraph\">body</div><div class=\"header-3\">level 3</div><div class=\"paragraph\">body 3</div>"
+  end
+
+  test "should render a code block" do
+    code_block = %CodeBlockNode{language: "css", content: [".me {", "color: \"red\"", "}"]}
+    assert HTMLDisplayable.from(code_block) == "<pre><code class=\"language-css\">.me {\ncolor: \"red\"\n}</code></pre>"
   end
 end
