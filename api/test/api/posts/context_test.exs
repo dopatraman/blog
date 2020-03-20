@@ -79,6 +79,62 @@ defmodule Api.Posts.ContextTest do
     end
   end
 
+  describe "get_post_with_author/1" do
+    test "should get a post with a preloaded author" do
+      post = insert(:post)
+      np = @post_context.get_post_with_author(post.id)
+
+      assert np == post
+      assert np.author == post.author
+    end
+  end
+
+  describe "get_next_post/1" do
+    test "should return the next post" do
+      author = insert(:user)
+      post1 = insert(:post, author: author)
+      post1_dt = DateTime.from_naive!(post1.inserted_at, "Etc/UTC")
+      post2 = insert(:post, author: author, inserted_at: DateTime.add(post1_dt, 3600, :second))
+      _post3 = insert(:post, author: author, inserted_at: DateTime.add(post1_dt, 7200, :second))
+
+      next_post = @post_context.get_next_post(post1) |> Api.Repo.preload([:author])
+
+      assert next_post == post2
+    end
+
+    test "should return no posts" do
+      author = insert(:user)
+      post1 = insert(:post, author: author)
+
+      next_post = @post_context.get_next_post(post1) |> Api.Repo.preload([:author])
+
+      assert next_post == nil
+    end
+  end
+
+  describe "get_prev_post/1" do
+    test "should return the previous post" do
+      author = insert(:user)
+      post1 = insert(:post, author: author)
+      post1_dt = DateTime.from_naive!(post1.inserted_at, "Etc/UTC")
+      post2 = insert(:post, author: author, inserted_at: DateTime.add(post1_dt, 3600, :second))
+      post3 = insert(:post, author: author, inserted_at: DateTime.add(post1_dt, 7200, :second))
+
+      prev_post = @post_context.get_prev_post(post3) |> Api.Repo.preload([:author])
+
+      assert prev_post == post2
+    end
+
+    test "should return no posts" do
+      author = insert(:user)
+      post1 = insert(:post, author: author)
+
+      prev_post = @post_context.get_prev_post(post1) |> Api.Repo.preload([:author])
+
+      assert prev_post == nil
+    end
+  end
+
   describe "get_all_posts/1" do
     test "should return an empty list for a non-existent author_id" do
       {:error, _} = @post_context.get_all_posts(1)

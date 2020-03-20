@@ -53,6 +53,8 @@ defmodule Api.Common.DisplayableTest do
 
   test "should render a code block" do
     code_block = %CodeBlockNode{language: "css", content: [".me {", "color: \"red\"", "}"]}
-    assert HTMLDisplayable.from(code_block) == "<pre><code class=\"language-css\">.me {\ncolor: \"red\"\n}</code></pre>"
+
+    assert HTMLDisplayable.from(code_block) ==
+             "<pre><code class=\"language-css\">.me {\ncolor: \"red\"\n}</code></pre>"
   end
 end

@@ -32,6 +32,30 @@ defmodule Api.Posts.Context do
     |> Repo.get(id)
   end
 
+  def get_post_with_author(id) do
+    get_post(id)
+    |> Repo.preload([:author])
+  end
+
+  @spec get_next_post(PostSchema.t()) :: Query.t()
+  def get_next_post(post) do
+    PostSchema
+    |> where([p], p.author_id == ^post.author_id)
+    |> where([p], p.inserted_at > ^post.inserted_at)
+    |> limit(1)
+    |> Repo.one()
+  end
+
+  @spec get_prev_post(PostSchema.t()) :: Query.t()
+  def get_prev_post(post) do
+    PostSchema
+    |> where([p], p.author_id == ^post.author_id)
+    |> where([p], p.inserted_at < ^post.inserted_at)
+    |> order_by([p], desc: p.inserted_at)
+    |> limit(1)
+    |> Repo.one()
+  end
+
   def get_all_posts(author_id) do
     UserSchema
     |> Repo.get(author_id)
@@ -45,6 +69,7 @@ defmodule Api.Posts.Context do
     for_author_name(username)
     |> limit(1)
     |> Repo.one()
+    |> Repo.preload([:author])
   end
 
   @spec for_author(UserSchema.t()) :: Query.t()
