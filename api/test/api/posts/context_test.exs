@@ -52,33 +52,6 @@ defmodule Api.Posts.ContextTest do
     end
   end
 
-  # TODO: have property test for all combinations of
-  # Elixir primitive types
-  describe "get_post/1" do
-    test "should get a post by id" do
-      post = insert(:post)
-
-      new_post =
-        @post_context.get_post(post.id)
-        |> Api.Repo.preload([:author])
-
-      assert new_post == post
-    end
-
-    test "should return an error for a non-existent post" do
-      post = @post_context.get_post(1)
-      assert post == nil
-    end
-
-    test "should return an error for non-integer values" do
-      alias Ecto.Query.CastError
-
-      assert_raise CastError, fn ->
-        @post_context.get_post("hello")
-      end
-    end
-  end
-
   describe "get_post_with_author/1" do
     test "should get a post with a preloaded author" do
       post = insert(:post)
@@ -94,12 +67,12 @@ defmodule Api.Posts.ContextTest do
       author = insert(:user)
       post1 = insert(:post, author: author)
       post1_dt = DateTime.from_naive!(post1.inserted_at, "Etc/UTC")
-      post2 = insert(:post, author: author, inserted_at: DateTime.add(post1_dt, 3600, :second))
-      _post3 = insert(:post, author: author, inserted_at: DateTime.add(post1_dt, 7200, :second))
+      _post2 = insert(:post, author: author, inserted_at: DateTime.add(post1_dt, 3600, :second), is_private: true)
+      post3 = insert(:post, author: author, inserted_at: DateTime.add(post1_dt, 7200, :second))
 
       next_post = @post_context.get_next_post(post1) |> Api.Repo.preload([:author])
 
-      assert next_post == post2
+      assert next_post == post3
     end
 
     test "should return no posts" do
@@ -119,6 +92,7 @@ defmodule Api.Posts.ContextTest do
       post1_dt = DateTime.from_naive!(post1.inserted_at, "Etc/UTC")
       post2 = insert(:post, author: author, inserted_at: DateTime.add(post1_dt, 3600, :second))
       post3 = insert(:post, author: author, inserted_at: DateTime.add(post1_dt, 7200, :second))
+      _post4 = insert(:post, author: author, inserted_at: DateTime.add(post1_dt, 9000, :second), is_private: true)
 
       prev_post = @post_context.get_prev_post(post3) |> Api.Repo.preload([:author])
 
@@ -132,12 +106,6 @@ defmodule Api.Posts.ContextTest do
       prev_post = @post_context.get_prev_post(post1) |> Api.Repo.preload([:author])
 
       assert prev_post == nil
-    end
-  end
-
-  describe "get_all_posts/1" do
-    test "should return an empty list for a non-existent author_id" do
-      {:error, _} = @post_context.get_all_posts(1)
     end
   end
 

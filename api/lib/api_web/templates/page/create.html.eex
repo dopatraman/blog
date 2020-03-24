@@ -8,6 +8,10 @@
       <div class="editor-panel">
         <div class="button-container-vertical">
           <%= submit "Create", [id: "create-post", class: "button create"] %>
+          <div class="checkbox-container">
+            <%= checkbox f, :is_private, [value: "true"] %>
+            <div>Draft</div>
+          </div>
         </div>
       </div>
     </div>
