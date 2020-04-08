@@ -18,6 +18,7 @@ defmodule Api.Posts.ContextTest do
       assert post.author_id == author.id
       assert post.title == "Title"
       assert post.content == "Content"
+      assert not is_nil(post.post_id)
     end
 
     # Note: good candidate for property test

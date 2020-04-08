@@ -4,12 +4,16 @@ defmodule Api.Factory do
   alias Api.Posts.Schema, as: PostSchema
   alias Api.User.Schema, as: UserSchema
   alias Api.Auth.Session.Schema, as: SessionSchema
+  alias Api.Posts.Helpers
 
   def post_factory do
+    user = build(:user)
+    content = "My Content"
     %PostSchema{
-      author: build(:user),
+      author: user,
+      post_id: Helpers.generate_post_id(user.id, content),
       title: "My Post",
-      content: "My Content",
+      content: content,
       is_private: false,
       is_processed: false
     }
@@ -22,6 +26,7 @@ defmodule Api.Factory do
   # https://github.com/thoughtbot/ex_machina
   def user_factory do
     %UserSchema{
+      id: Faker.Random.Elixir.random_between(1, 100000),
       username: Faker.Pokemon.name(),
       email: Faker.Internet.email(),
       password: Bcrypt.hash_pwd_salt(Faker.Lorem.word())

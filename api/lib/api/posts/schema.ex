@@ -7,6 +7,7 @@ defmodule Api.Posts.Schema do
   @type t() :: %PostSchema{
           id: integer(),
           author_id: integer(),
+          post_id: String.t(),
           title: String.t(),
           content: String.t(),
           is_private: boolean(),
@@ -16,6 +17,7 @@ defmodule Api.Posts.Schema do
   @derive {Jason.Encoder, only: [:author_id, :content, :is_private, :title]}
   schema "posts" do
     belongs_to :author, UserSchema
+    field :post_id, :string
     field :title, :string
     field :content, :string
     field :is_private, :boolean, default: false
@@ -27,7 +29,7 @@ defmodule Api.Posts.Schema do
   @doc false
   def changeset(post, attrs) do
     post
-    |> cast(attrs, [:author_id, :content, :title, :is_private, :is_processed])
-    |> validate_required([:author_id, :content, :title, :is_private, :is_processed])
+    |> cast(attrs, [:author_id, :post_id, :content, :title, :is_private, :is_processed])
+    |> validate_required([:author_id, :post_id, :content, :title, :is_private, :is_processed])
   end
 end

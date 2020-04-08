@@ -5,6 +5,7 @@ defmodule Api.Posts.Context do
   alias Api.Repo
   alias Api.Posts.Schema, as: PostSchema
   alias Api.User.Schema, as: UserSchema
+  alias Api.Posts.Helpers
 
   def insert_post(%{"author_id" => author_id} = params) when is_number(author_id) do
     UserSchema
@@ -19,6 +20,7 @@ defmodule Api.Posts.Context do
     %PostSchema{}
     |> Changeset.change()
     |> Changeset.put_change(:author_id, author.id)
+    |> Changeset.put_change(:post_id, Helpers.generate_post_id(author.id, Map.get(params, "content")))
     |> PostSchema.changeset(params)
     |> Repo.insert()
   end
