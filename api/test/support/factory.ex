@@ -8,12 +8,11 @@ defmodule Api.Factory do
 
   def post_factory do
     user = build(:user)
-    content = "My Content"
     %PostSchema{
       author: user,
-      post_id: Helpers.generate_post_id(user.id, content),
+      post_id: Helpers.generate_post_id(user.id),
       title: "My Post",
-      content: content,
+      content: "My Content",
       is_private: false,
       is_processed: false
     }
