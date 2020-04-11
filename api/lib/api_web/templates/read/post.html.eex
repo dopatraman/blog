@@ -1,0 +1,8 @@
+<div class="post-container">
+  <div class="side-bar">
+  </div>
+  <div class="post">
+    <h1><%= @title %></h1>
+    <p><%= raw @content %></p>
+  </div>
+</div>

@@ -7,6 +7,12 @@ defmodule Api.Posts.Context do
   alias Api.User.Schema, as: UserSchema
   alias Api.Posts.Helpers
 
+  def get_post_by_post_id(post_id) do
+    PostSchema
+    |> where([p], p.post_id == ^post_id)
+    |> Repo.one()
+  end
+
   def insert_post(%{"author_id" => author_id} = params) when is_number(author_id) do
     UserSchema
     |> Repo.get(author_id)

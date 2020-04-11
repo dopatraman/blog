@@ -30,27 +30,6 @@ defmodule ApiWeb.PageController do
     end
   end
 
-  def post(conn, %{"username" => _username, "post_id" => p_id}) do
-    case @post_context.get_post_with_author(p_id) do
-      nil ->
-        put_status(conn, 404) |> json(:error)
-
-      post ->
-        prev_post = @post_context.get_prev_post(post)
-        next_post = @post_context.get_next_post(post)
-
-        render_post(
-          conn,
-          "latest.html",
-          post,
-          post_title(prev_post),
-          post_id(prev_post),
-          post_title(next_post),
-          post_id(next_post)
-        )
-    end
-  end
-
   defp render_post(
          conn,
          form_name,

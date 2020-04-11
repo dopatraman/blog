@@ -8,6 +8,7 @@ defmodule Api.Factory do
 
   def post_factory do
     user = build(:user)
+
     %PostSchema{
       author: user,
       post_id: Helpers.generate_post_id(user.id),
@@ -25,7 +26,7 @@ defmodule Api.Factory do
   # https://github.com/thoughtbot/ex_machina
   def user_factory do
     %UserSchema{
-      id: Faker.Random.Elixir.random_between(1, 100000),
+      id: Faker.Random.Elixir.random_between(1, 100_000),
       username: Faker.Pokemon.name(),
       email: Faker.Internet.email(),
       password: Bcrypt.hash_pwd_salt(Faker.Lorem.word())

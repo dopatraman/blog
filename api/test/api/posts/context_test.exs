@@ -4,6 +4,17 @@ defmodule Api.Posts.ContextTest do
 
   @post_context Application.get_env(:api, :post_context)
 
+  describe "get_post_by_post_id/1" do
+    test "should get a post by post_id" do
+      post = insert(:post)
+      np = @post_context.get_post_by_post_id(post.post_id)
+      assert !is_nil(np)
+      assert np.id == post.id
+      assert np.title == post.title
+      assert np.content == post.content
+    end
+  end
+
   describe "insert_post/2" do
     test "should insert a post for a user_id and params" do
       author = insert(:user)
@@ -68,7 +79,14 @@ defmodule Api.Posts.ContextTest do
       author = insert(:user)
       post1 = insert(:post, author: author)
       post1_dt = DateTime.from_naive!(post1.inserted_at, "Etc/UTC")
-      _post2 = insert(:post, author: author, inserted_at: DateTime.add(post1_dt, 3600, :second), is_private: true)
+
+      _post2 =
+        insert(:post,
+          author: author,
+          inserted_at: DateTime.add(post1_dt, 3600, :second),
+          is_private: true
+        )
+
       post3 = insert(:post, author: author, inserted_at: DateTime.add(post1_dt, 7200, :second))
 
       next_post = @post_context.get_next_post(post1) |> Api.Repo.preload([:author])
@@ -93,7 +111,13 @@ defmodule Api.Posts.ContextTest do
       post1_dt = DateTime.from_naive!(post1.inserted_at, "Etc/UTC")
       post2 = insert(:post, author: author, inserted_at: DateTime.add(post1_dt, 3600, :second))
       post3 = insert(:post, author: author, inserted_at: DateTime.add(post1_dt, 7200, :second))
-      _post4 = insert(:post, author: author, inserted_at: DateTime.add(post1_dt, 9000, :second), is_private: true)
+
+      _post4 =
+        insert(:post,
+          author: author,
+          inserted_at: DateTime.add(post1_dt, 9000, :second),
+          is_private: true
+        )
 
       prev_post = @post_context.get_prev_post(post3) |> Api.Repo.preload([:author])
 
