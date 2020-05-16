@@ -1,5 +1,5 @@
 <div class="container">
-  <%= form_for @conn, Routes.posts_path(@conn, :create) , fn f -> %>
+  <%= form_for @conn, Routes.posts_path(@conn, :create_anonymous_post) , fn f -> %>
     <div class="editor-container">
       <div class="editor">
         <%= text_input f, :title, [id: "title", class: "title", placeholder: "Title"] %>
@@ -7,11 +7,7 @@
       </div>
       <div class="editor-panel">
         <div class="button-container-vertical">
-          <%= submit "Create", [id: "create-post", class: "button create"] %>
-          <div class="checkbox-container">
-            <%= checkbox f, :is_private, [value: "true"] %>
-            <div>Draft</div>
-          </div>
+          <%= submit "Create", [id: "create-anon-post", class: "button create"] %>
         </div>
       </div>
     </div>

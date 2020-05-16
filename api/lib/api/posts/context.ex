@@ -4,11 +4,18 @@ defmodule Api.Posts.Context do
   alias Ecto.Changeset
   alias Api.Repo
   alias Api.Posts.Schema, as: PostSchema
+  alias Api.Posts.AnonymousPost, as: AnonymousPostSchema
   alias Api.User.Schema, as: UserSchema
   alias Api.Posts.Helpers
 
   def get_post_by_post_id(post_id) do
     PostSchema
+    |> where([p], p.post_id == ^post_id)
+    |> Repo.one()
+  end
+
+  def get_anonymous_post_by_post_id(post_id) do
+    AnonymousPostSchema
     |> where([p], p.post_id == ^post_id)
     |> Repo.one()
   end
@@ -20,6 +27,14 @@ defmodule Api.Posts.Context do
       nil -> insert_post_nil(nil)
       user -> insert_post_for_author(user, params)
     end
+  end
+
+  def insert_anonymous_post(params) do
+    %AnonymousPostSchema{}
+    |> Changeset.change()
+    |> Changeset.put_change(:post_id, Helpers.generate_post_id(Map.get(params, "title")))
+    |> AnonymousPostSchema.changeset(params)
+    |> Repo.insert()
   end
 
   defp insert_post_for_author(%UserSchema{} = author, params) do

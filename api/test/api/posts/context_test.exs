@@ -15,7 +15,17 @@ defmodule Api.Posts.ContextTest do
     end
   end
 
-  describe "insert_post/2" do
+  describe "get_anonymous_post_by_post_id/1" do
+    test "should get a post by post_id" do
+      post = insert(:anonymous_post)
+      np = @post_context.get_anonymous_post_by_post_id(post.post_id)
+      assert !is_nil(np)
+      assert np.title == post.title
+      assert np.content == post.content
+    end
+  end
+
+  describe "insert_post/1" do
     test "should insert a post for a user_id and params" do
       author = insert(:user)
 
@@ -61,6 +71,20 @@ defmodule Api.Posts.ContextTest do
           "author_id" => author.id,
           "title" => "Title"
         })
+    end
+  end
+
+  describe "insert_anonymous_post/1" do
+    test "should insert a post into the anonymous_posts table" do
+      post = %{
+        "title" => "Foo",
+        "content" => "Bar"
+      }
+
+      {:ok, np} = @post_context.insert_anonymous_post(post)
+      assert !is_nil(np)
+      assert np.title == "Foo"
+      assert np.content == "Bar"
     end
   end
 

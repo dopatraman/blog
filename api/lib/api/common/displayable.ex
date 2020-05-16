@@ -23,6 +23,23 @@ defimpl HTMLDisplayable, for: Api.Posts.Schema do
   end
 end
 
+defimpl HTMLDisplayable, for: Api.Posts.AnonymousPost do
+  alias Api.Posts.Tokenizer
+  alias Api.Posts.Parser
+
+  def from(post) do
+    content =
+      Tokenizer.tokenize(post)
+      |> Parser.parse_content()
+      |> HTMLDisplayable.from()
+
+    %Api.Posts.AnonymousPost{
+      post
+      | content: "<div class=\"post-content\">" <> content <> "</div>"
+    }
+  end
+end
+
 defimpl HTMLDisplayable, for: Api.Posts.Parser.RootNode do
   alias Api.Posts.Parser.RootNode
 

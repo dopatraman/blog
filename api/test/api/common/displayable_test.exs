@@ -2,6 +2,7 @@ defmodule Api.Common.DisplayableTest do
   use ExUnit.Case
 
   alias Api.Posts.Schema, as: PostSchema
+  alias Api.Posts.AnonymousPost, as: AnonymousPostSchema
   alias Api.Posts.Parser.RootNode
   alias Api.Posts.Parser.HeaderNode
   alias Api.Posts.Parser.CodeBlockNode
@@ -14,6 +15,19 @@ defmodule Api.Common.DisplayableTest do
 
   test "should convert post content to displayable content" do
     post = %PostSchema{
+      title: "My\nTitle",
+      content: "My\nContent"
+    }
+
+    new_post = HTMLDisplayable.from(post)
+    assert new_post.title == post.title
+
+    assert new_post.content ==
+             "<div class=\"post-content\"><div class=\"paragraph\">My</div><div class=\"paragraph\">Content</div></div>"
+  end
+
+  test "should convert anonymous post content to displayable content" do
+    post = %AnonymousPostSchema{
       title: "My\nTitle",
       content: "My\nContent"
     }

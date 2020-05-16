@@ -2,6 +2,7 @@ defmodule Api.Factory do
   use ExMachina.Ecto, repo: Api.Repo
 
   alias Api.Posts.Schema, as: PostSchema
+  alias Api.Posts.AnonymousPost, as: AnonymousPostSchema
   alias Api.User.Schema, as: UserSchema
   alias Api.Auth.Session.Schema, as: SessionSchema
   alias Api.Posts.Helpers
@@ -16,6 +17,14 @@ defmodule Api.Factory do
       content: "My Content",
       is_private: false,
       is_processed: false
+    }
+  end
+
+  def anonymous_post_factory do
+    %AnonymousPostSchema{
+      post_id: Helpers.generate_post_id("My Post"),
+      title: "My Post",
+      content: "My Content"
     }
   end
 

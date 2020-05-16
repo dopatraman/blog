@@ -8,9 +8,13 @@ defmodule Api.Posts.Tokenizer do
   }
 
   alias Api.Posts.Schema, as: PostSchema
+  alias Api.Posts.AnonymousPost, as: AnonymousPostSchema
 
   @spec tokenize(PostSchema.t()) :: [Token.t()]
   def tokenize(%PostSchema{content: content}), do: tokenize(content)
+
+  @spec tokenize(AnonymousPostSchema.t()) :: [Token.t()]
+  def tokenize(%AnonymousPostSchema{content: content}), do: tokenize(content)
 
   @spec tokenize(String.t()) :: [Token.t()]
   def tokenize(content) when is_binary(content) do

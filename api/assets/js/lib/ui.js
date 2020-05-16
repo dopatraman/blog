@@ -11,6 +11,15 @@ window.onload = function() {
     })
   }
 
+  const anonPostButton = document.getElementById("create-anon-post");
+  if (anonPostButton !== null) {
+    anonPostButton.addEventListener("click", (evt) => {
+      const title = document.getElementById("title").value;
+      const content = document.getElementById("content").value;
+      apiClient.createAnonPost(title, content);
+    })
+  }
+
   const loginButton = document.getElementById("login");
   const usernameField = document.getElementById("username");
   const passwordField = document.getElementById("password");

@@ -17,4 +17,12 @@ defmodule ApiWeb.PostsController do
   end
 
   def create(conn, _), do: put_status(conn, 500) |> json(:error)
+
+  def create_anonymous_post(conn, params) do
+    @post_context.insert_anonymous_post(params)
+    |> case do
+      {:ok, post} -> redirect(conn, to: Routes.read_path(Endpoint, :anonymous_post, post.post_id))
+      {:error, _} -> put_status(conn, 500) |> redirect(to: "/write")
+    end
+  end
 end

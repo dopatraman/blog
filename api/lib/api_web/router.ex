@@ -33,9 +33,16 @@ defmodule ApiWeb.Router do
     get "/latest", PageController, :latest
   end
 
-  scope "/read/:post_id", ApiWeb do
+  scope "/read", ApiWeb do
     pipe_through [:browser]
-    get "/", ReadController, :post
+    get "/:post_id", ReadController, :post
+    get "/anon/:post_id", ReadController, :anonymous_post
+  end
+
+  scope "/write", ApiWeb do
+    pipe_through [:browser]
+    get "/", PageController, :create_anonymous_post
+    post "/anon", PostsController, :create_anonymous_post
   end
 
   scope "/", ApiWeb do

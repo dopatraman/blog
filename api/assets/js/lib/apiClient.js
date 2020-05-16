@@ -45,4 +45,19 @@ export default function ApiClient() {
       })
     }).then(console.log);
   }
+
+  this.createAnonPost = function(title, content) {
+    console.log(title, content)
+    debugger;
+    return fetch("/anon", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        title: title,
+        content: content
+      })
+    }).then(console.log);
+  }
 }
