@@ -8,7 +8,7 @@ defmodule ApiWeb.PageController do
 
   def create_anonymous_post(conn, _), do: render(conn, "create-anon.html")
 
-  def index(conn, _params), do: redirect(conn, to: "/login")
+  def index(conn, _params), do: redirect(conn, to: "/write")
 
   # GET/latest
   def latest(conn, %{"username" => username}) do
