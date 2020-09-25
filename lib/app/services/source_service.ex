@@ -1,4 +1,4 @@
-defmodule Blog.App.Services.Source do
+defmodule Blog.App.SourceService do
   @moduledoc """
   This module contains git logic for fetching posts
   """
