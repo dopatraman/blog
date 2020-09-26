@@ -6,11 +6,21 @@ defmodule Blog.Web.Endpoint do
   use Plug.Router
   import Plug.Conn, only: [send_resp: 3]
 
+  alias Blog.Web.GitHookController
+
   plug(Plug.Logger)
   plug(:match)
   plug(:dispatch)
 
   get "/ping" do
     send_resp(conn, 200, "pong")
+  end
+
+  post "/update" do
+    case GitHookController.update_from_source(conn) do
+      :success -> send_resp(conn, 200, :success)
+      :failure -> send_resp(conn, 400, :failure)
+      :unauthorized -> send_resp(conn, 401, :unauthorized)
+    end
   end
 end

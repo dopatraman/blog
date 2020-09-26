@@ -4,18 +4,18 @@ defmodule Blog.Web.GitHookController do
   """
   alias Blog.App.SourceService
 
-  def source_post_receive(token) do
+  def source_post_receive(%{"token" => token}) do
     # auth token
     case auth(token) do
       :ok -> update_from_source
-      _ -> {401, "Unauthorized"}
+      _ -> :unauthorized
     end
   end
 
   defp update_from_source do
-    case SourceService.SourceService.update_local_posts_from_source() do
-      :ok -> {200, "Thanks"}
-      :error -> {400, "Something went wrong."}
+    case SourceService.update_local_posts_from_source() do
+      :ok -> :success
+      _ -> :failure
     end
   end
 

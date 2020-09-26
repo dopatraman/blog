@@ -19,14 +19,14 @@ defmodule Blog.App.SourceService do
   defp git_clone(remote_url, local_path) do
     case System.cmd("git", ["clone", remote_url, local_path]) do
       {_, 0} -> :ok
-      _ -> :error
+      _ -> :clone_error
     end
   end
 
   defp git_pull(local_path) do
     case System.cmd("git", ["pull"], cd: local_path) do
       {_, 0} -> :ok
-      _ -> :error
+      _ -> :pull_error
     end
   end
 end
