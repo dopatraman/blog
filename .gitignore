@@ -25,3 +25,4 @@ blog-*.tar
 *.swp
 *.swo
 
+.DS_Store
