@@ -17,7 +17,7 @@ defmodule Blog.Web.Endpoint do
   end
 
   post "/update" do
-    case GitHookController.update_from_source(conn) do
+    case GitHookController.post_receive(conn) do
       :success -> send_resp(conn, 200, :success)
       :failure -> send_resp(conn, 400, :failure)
       :unauthorized -> send_resp(conn, 401, :unauthorized)

@@ -4,10 +4,10 @@ defmodule Blog.Web.GitHookController do
   """
   alias Blog.App.SourceService
 
-  def source_post_receive(%{"token" => token}) do
+  def post_receive(%{"token" => token}) do
     # auth token
     case auth(token) do
-      :ok -> update_from_source
+      :ok -> update_from_source()
       _ -> :unauthorized
     end
   end
