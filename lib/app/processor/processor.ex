@@ -9,7 +9,7 @@ defimpl HTMLDisplayable, for: BitString do
   end
 end
 
-#defimpl HTMLDisplayable, for: Api.Posts.Schema do
+# defimpl HTMLDisplayable, for: Api.Posts.Schema do
 #  alias Api.Posts.Tokenizer
 #  alias Api.Posts.Parser
 #
@@ -21,7 +21,7 @@ end
 #
 #    %Api.Posts.Schema{post | content: "<div class=\"post-content\">" <> content <> "</div>"}
 #  end
-#end
+# end
 
 defimpl HTMLDisplayable, for: Api.Posts.Parser.RootNode do
   alias Api.Posts.Parser.RootNode

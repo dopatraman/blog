@@ -7,6 +7,7 @@ defmodule Blog.Web.Endpoint do
   import Plug.Conn, only: [send_resp: 3]
 
   alias Blog.Web.GitHookController
+  alias Blog.Web.PostWorkFlow
 
   plug(Plug.Logger)
   plug(:match)
@@ -21,6 +22,15 @@ defmodule Blog.Web.Endpoint do
       :success -> send_resp(conn, 200, :success)
       :failure -> send_resp(conn, 400, :failure)
       :unauthorized -> send_resp(conn, 401, :unauthorized)
+    end
+  end
+
+  get "/post/:path" do
+    %{"path" => path} = conn.params
+
+    case PostWorkFlow.serve_post(path) do
+      {:ok, post_html} -> send_resp(conn, 200, post_html)
+      {:error, _} -> send_resp(conn, 404, :not_found)
     end
   end
 end
