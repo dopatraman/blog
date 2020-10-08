@@ -2,26 +2,20 @@ defmodule Blog.Web.PostWorkflow do
   @moduledoc """
   This module contains all post related workflows
   """
-  alias Api.Posts.Tokenizer
-  alias Api.Posts.Parser
+  alias Blog.Data.FilePath
+  alias Blog.App.Processor
+
+  @spec serve_dir() :: FilePath.t()
+  def serve_dir() do
+    FilePath.read_directory(Application.get_env(:blog, :local_content_dir))
+  end
 
   @spec serve_post(String.t()) :: {:ok, String.t()} | {:error, atom()} | {:error, nil}
   def serve_post(post_path) do
     case File.exists?(post_path) do
-      true -> File.read(post_path) |> process_content()
+      true -> File.read(post_path) |> Processor.process_content()
       false -> {:error, nil}
     end
   end
-
-  @spec process_content({:ok, String.t()}) :: {:ok, String.t()} | {:error, atom}
-  def process_content({:ok, content}) do
-    html =
-      Tokenizer.tokenize(content)
-      |> Parser.parse_content()
-      |> HTMLDisplayable.from()
-
-    {:ok, html}
-  end
-
-  def process_content(e = {:error, _}), do: e
 end
+
