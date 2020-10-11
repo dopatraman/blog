@@ -34,6 +34,5 @@ defmodule Blog.Web.Endpoint do
     end
   end
 
-  get "/posts", do: send_resp(conn, 200, PostWorkflow.serve_dir())
+  get("/posts", do: send_resp(conn, 200, PostWorkflow.serve_dir()))
 end
-

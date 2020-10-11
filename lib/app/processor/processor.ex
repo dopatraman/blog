@@ -17,4 +17,3 @@ defmodule Blog.App.Processor do
 
   def process_content(e = {:error, _}), do: e
 end
-

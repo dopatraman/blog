@@ -20,6 +20,7 @@ defmodule Blog.Web.PostWorkflow do
 
   def is_content?(p) do
     full_p = Path.expand(p)
+
     Path.relative_to(full_p, Application.get_env(:blog, :local_content_dir))
     |> byte_size()
     |> case do
@@ -28,4 +29,3 @@ defmodule Blog.Web.PostWorkflow do
     end
   end
 end
-
