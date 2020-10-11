@@ -5,6 +5,11 @@ defmodule Blog.Data.FilePath do
           name: String.t(),
           children: list(t())
         }
+  @type mapt() :: %{
+          required(:name) => String.t(),
+          required(:type) => :file | :dir,
+          optional(:children) => [mapt()]
+        }
 
   defstruct name: nil,
             children: []
@@ -30,5 +35,17 @@ defmodule Blog.Data.FilePath do
             )
         }
     end
+  end
+
+  @spec as_map(FilePath.t()) :: mapt()
+  def as_map(f) do
+    children = Enum.map(f.children, fn child -> as_map(child) end)
+    type = if length(children) == 0, do: :file, else: :dir
+
+    %{
+      "name" => f.name,
+      "type" => type,
+      "children" => children
+    }
   end
 end
