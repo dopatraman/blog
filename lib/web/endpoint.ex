@@ -6,6 +6,7 @@ defmodule Blog.Web.Endpoint do
   use Plug.Router
   import Plug.Conn, only: [send_resp: 3]
 
+  alias Blog.Data.FilePath
   alias Blog.Web.GitHookController
   alias Blog.Web.PostWorkflow
 
@@ -34,5 +35,13 @@ defmodule Blog.Web.Endpoint do
     end
   end
 
-  get("/posts", do: send_resp(conn, 200, PostWorkflow.serve_dir()))
+  get "/posts" do
+    {:ok, d} = PostWorkflow.serve_dir() |> FilePath.as_map() |> Jason.encode([])
+
+    send_resp(
+      conn,
+      200,
+      d
+    )
+  end
 end
