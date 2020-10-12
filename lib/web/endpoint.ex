@@ -28,8 +28,9 @@ defmodule Blog.Web.Endpoint do
 
   get "/post/:path" do
     %{"path" => path} = conn.params
+    {:ok, decoded_path} = Base.decode64(path)
 
-    case PostWorkflow.serve_post(path) do
+    case PostWorkflow.serve_post(decoded_path) do
       {:ok, post_html} -> send_resp(conn, 200, post_html)
       {:error, _} -> send_resp(conn, 404, :not_found)
     end
@@ -38,10 +39,6 @@ defmodule Blog.Web.Endpoint do
   get "/posts" do
     {:ok, d} = PostWorkflow.serve_dir() |> FilePath.as_map() |> Jason.encode([])
 
-    send_resp(
-      conn,
-      200,
-      d
-    )
+    send_resp(conn, 200, d)
   end
 end
