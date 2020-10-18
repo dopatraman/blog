@@ -6,9 +6,9 @@ defmodule Blog.Web.Endpoint do
   use Plug.Router
   import Plug.Conn, only: [send_resp: 3]
 
-  alias Blog.Data.FilePath
   alias Blog.Web.GitHookController
   alias Blog.Web.PostWorkflow
+  alias Blog.Views.LayoutView
 
   plug(Plug.Logger)
   plug(:match)
@@ -16,6 +16,10 @@ defmodule Blog.Web.Endpoint do
 
   get "/ping" do
     send_resp(conn, 200, "pong")
+  end
+
+  get "/favicon.ico" do
+    send_resp(conn, 200, "icon")
   end
 
   post "/update" do
@@ -38,6 +42,6 @@ defmodule Blog.Web.Endpoint do
 
   get "/posts" do
     d = PostWorkflow.serve_dir()
-    send_resp(conn, 200, HTMLDisplayable.from(d))
+    send_resp(conn, 200, HTMLDisplayable.from(d) |> LayoutView.render())
   end
 end
