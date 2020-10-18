@@ -36,16 +36,19 @@ defmodule Blog.Data.FilePath do
         }
     end
   end
+end
 
-  @spec as_map(FilePath.t()) :: mapt()
-  def as_map(f) do
-    children = Enum.map(f.children, fn child -> as_map(child) end)
-    type = if length(children) == 0, do: :file, else: :dir
+defimpl HTMLDisplayable, for: Blog.Data.FilePath do
+  alias Blog.Data.FilePath
 
-    %{
-      "name" => f.name,
-      "type" => type,
-      "children" => children
-    }
+  def from(%FilePath{name: name, children: []}) do
+    "<a href=\"/post/#{Base.encode64(name)}\" class=\"post\">#{Path.basename(name)}</a>"
+  end
+
+  def from(%FilePath{name: name, children: children}) do
+    root = fn content -> "<div class=\"post-parent\">" <> content <> "</div>" end
+    parent_node = "<div class=\"parent-name\">#{Path.basename(name)}</div>"
+    child_nodes = Enum.map(children, fn c -> HTMLDisplayable.from(c) end)
+    Enum.join([parent_node | child_nodes], "") |> root.()
   end
 end

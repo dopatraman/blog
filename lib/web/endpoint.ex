@@ -37,8 +37,7 @@ defmodule Blog.Web.Endpoint do
   end
 
   get "/posts" do
-    {:ok, d} = PostWorkflow.serve_dir() |> FilePath.as_map() |> Jason.encode([])
-
-    send_resp(conn, 200, d)
+    d = PostWorkflow.serve_dir()
+    send_resp(conn, 200, HTMLDisplayable.from(d))
   end
 end
