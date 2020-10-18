@@ -7,7 +7,7 @@ defmodule Blog.Web.PostWorkflow do
 
   @spec serve_dir() :: FilePath.t()
   def serve_dir() do
-    FilePath.read_directory(Application.get_env(:blog, :local_content_dir))
+    FilePath.read_directory(Application.get_env(:blog, :post_dir))
   end
 
   @spec serve_post(String.t()) :: {:ok, String.t()} | {:error, atom()} | {:error, nil}
@@ -21,7 +21,7 @@ defmodule Blog.Web.PostWorkflow do
   def is_content?(p) do
     full_p = Path.expand(p)
 
-    Path.relative_to(full_p, Application.get_env(:blog, :local_content_dir))
+    Path.relative_to(full_p, Application.get_env(:blog, :post_dir))
     |> byte_size()
     |> case do
       x when x < byte_size(full_p) -> true

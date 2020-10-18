@@ -22,6 +22,20 @@ defmodule Blog.Web.Endpoint do
     send_resp(conn, 200, "icon")
   end
 
+  get "/styles/:stylesheet" do
+    %{"stylesheet" => stylesheet} = conn.params
+    style_path = Path.join(Application.get_env(:blog, :style_dir), stylesheet)
+
+    case File.exists?(style_path) do
+      true ->
+        {:ok, content} = File.read(style_path)
+        send_resp(conn, 200, content)
+
+      _ ->
+        send_resp(conn, 404, :not_found)
+    end
+  end
+
   post "/update" do
     case GitHookController.post_receive(conn) do
       :success -> send_resp(conn, 200, :success)
@@ -42,6 +56,12 @@ defmodule Blog.Web.Endpoint do
 
   get "/posts" do
     d = PostWorkflow.serve_dir()
-    send_resp(conn, 200, HTMLDisplayable.from(d) |> LayoutView.render())
+
+    send_resp(
+      conn,
+      200,
+      HTMLDisplayable.from(d)
+      |> LayoutView.render(Path.join("/styles", "directory.css"))
+    )
   end
 end
