@@ -47,7 +47,7 @@ defimpl HTMLDisplayable, for: Blog.Data.FilePath do
 
   def from(%FilePath{name: name, children: children}) do
     root = fn content -> "<div class=\"post-parent\">" <> content <> "</div>" end
-    parent_node = "<div class=\"parent-name\">#{Path.basename(name)}</div>"
+    parent_node = "<div class=\"parent-name\">#{Path.basename(name)}/</div>"
     child_nodes = Enum.map(children, fn c -> HTMLDisplayable.from(c) end)
     Enum.join([parent_node | child_nodes], "") |> root.()
   end

@@ -3,6 +3,8 @@
     <link type="text/css" rel="stylesheet" href="<%= style %>" />
   </head>
   <body>
-    <%= content %>
+    <div class="directory-container">
+      <%= content %>
+    </div>
   </body>
 </html>
