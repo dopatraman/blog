@@ -9,6 +9,7 @@ defmodule Blog.Web.Endpoint do
   alias Blog.Web.GitHookController
   alias Blog.Web.PostWorkflow
   alias Blog.Views.LayoutView
+  alias Blog.Views.PostView
 
   plug(Plug.Logger)
   plug(:match)
@@ -24,6 +25,7 @@ defmodule Blog.Web.Endpoint do
 
   get "/styles/:stylesheet" do
     %{"stylesheet" => stylesheet} = conn.params
+    IO.inspect(stylesheet)
     style_path = Path.join(Application.get_env(:blog, :style_dir), stylesheet)
 
     case File.exists?(style_path) do
@@ -49,7 +51,7 @@ defmodule Blog.Web.Endpoint do
     {:ok, decoded_path} = Base.decode64(path)
 
     case PostWorkflow.serve_post(decoded_path) do
-      {:ok, post_html} -> send_resp(conn, 200, post_html)
+      {:ok, post_html} -> send_resp(conn, 200, PostView.render(post_html, Path.join("/styles", "post.css")))
       {:error, _} -> send_resp(conn, 404, :not_found)
     end
   end
