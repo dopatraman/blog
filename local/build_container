@@ -1,0 +1,5 @@
+#!/usr/bin/env bash
+
+docker build --build-arg port=80 \
+  -t blog-ubuntu:latest .
+

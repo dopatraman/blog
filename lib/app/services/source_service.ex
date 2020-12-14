@@ -17,6 +17,7 @@ defmodule Blog.App.SourceService do
   end
 
   defp git_clone(remote_url, local_path) do
+    IO.inspect("Cloning " <> remote_url)
     case System.cmd("git", ["clone", remote_url, local_path]) do
       {_, 0} -> :ok
       _ -> :clone_error
@@ -24,6 +25,7 @@ defmodule Blog.App.SourceService do
   end
 
   defp git_pull(local_path) do
+    IO.inspect("Pulling " <> local_path)
     case System.cmd("git", ["pull"], cd: local_path) do
       {_, 0} -> :ok
       _ -> :pull_error

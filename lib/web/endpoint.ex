@@ -13,6 +13,7 @@ defmodule Blog.Web.Endpoint do
 
   plug(Plug.Logger)
   plug(:match)
+  plug(Plug.Parsers, parsers: [:urlencoded])
   plug(:dispatch)
 
   get "/ping" do
@@ -39,10 +40,10 @@ defmodule Blog.Web.Endpoint do
   end
 
   post "/update" do
-    case GitHookController.post_receive(conn) do
-      :success -> send_resp(conn, 200, :success)
-      :failure -> send_resp(conn, 400, :failure)
-      :unauthorized -> send_resp(conn, 401, :unauthorized)
+    case GitHookController.post_receive(conn.body_params) do
+      :success -> send_resp(conn, 200, ":success")
+      :failure -> send_resp(conn, 400, ":failure")
+      :unauthorized -> send_resp(conn, 401, ":unauthorized")
     end
   end
 
@@ -51,8 +52,11 @@ defmodule Blog.Web.Endpoint do
     {:ok, decoded_path} = Base.decode64(path)
 
     case PostWorkflow.serve_post(decoded_path) do
-      {:ok, post_html} -> send_resp(conn, 200, PostView.render(post_html, Path.join("/styles", "post.css")))
-      {:error, _} -> send_resp(conn, 404, :not_found)
+      {:ok, post_html} ->
+        send_resp(conn, 200, PostView.render(post_html, Path.join("/styles", "post.css")))
+
+      {:error, _} ->
+        send_resp(conn, 404, :not_found)
     end
   end
 

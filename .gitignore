@@ -22,6 +22,12 @@ erl_crash.dump
 # Ignore package tarball (built via "mix hex.build").
 blog-*.tar
 
+.hex/
+.mix/
+.content/
+rel/
+config/prod.exs
+
 *.swp
 *.swo
 

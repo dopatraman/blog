@@ -19,7 +19,7 @@ defmodule Blog.Web.GitHookController do
     end
   end
 
-  defp auth(token) do
-    :ok
-  end
+  defp auth(token), do: if Application.get_env(:blog, :secret) == token,
+    do: :ok,
+    else: :error
 end
