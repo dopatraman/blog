@@ -1,7 +1,7 @@
 import Config
 
 config :blog,
-  port: 8000,
+  port: 80,
   post_repo_url: "https://github.com/dopatraman/blog-posts.git",
   local_content_dir: Path.expand("./.content"),
   post_dir: Path.expand("./.content/posts"),
