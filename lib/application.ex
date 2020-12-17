@@ -4,18 +4,18 @@ defmodule Blog.Application do
   use Application
 
   def start(_type, _args) do
-    port = Application.get_env(:blog, :port)
-
+    scheme = Application.get_env(:blog, :scheme)
+    options = Application.get_env(:blog, :start_options)
     children = [
       Plug.Cowboy.child_spec(
-        scheme: :http,
+        scheme: scheme,
         plug: Blog.Web.Endpoint,
-        options: [port: port]
+        options: options
       )
     ]
 
     opts = [strategy: :one_for_one, name: Blog.Supervisor]
-    IO.puts("Starting on port #{port}...")
+    IO.puts("Starting on port #{options[:port]}...")
     Supervisor.start_link(children, opts) |> IO.inspect()
   end
 end

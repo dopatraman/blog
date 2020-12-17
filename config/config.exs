@@ -1,7 +1,10 @@
 import Config
 
 config :blog,
-  port: 80,
+  scheme: :http,
+  start_options: [
+    port: 80
+  ],
   post_repo_url: "https://github.com/dopatraman/blog-posts.git",
   local_content_dir: Path.expand("./.content"),
   post_dir: Path.expand("./.content/posts"),
